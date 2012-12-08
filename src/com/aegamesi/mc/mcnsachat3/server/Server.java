@@ -14,13 +14,13 @@ public class Server {
 		ServerSocket serverSocket = null;
 		boolean listening = true;
 		threads = new ArrayList<ServerThread>();
-		int port = 6768;
+		int port = 51325;
 		
 		System.out.println("MCNSAChat3 Server");
 		System.out.println("Server Started on port " + port);
 
 		try {
-			serverSocket = new ServerSocket(6768);
+			serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
 			System.err.println("Could not listen on port " + port);
 			System.exit(-1);
@@ -32,7 +32,7 @@ public class Server {
 			ServerThread t = new ServerThread(sock);
 			t.start();
 			threads.add(t);
-			System.out.println("New connection from " + sock.getInetAddress().getCanonicalHostName());
+			t.log("New connection");
 		}
 
 		serverSocket.close();
