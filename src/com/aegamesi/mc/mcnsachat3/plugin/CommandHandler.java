@@ -1,4 +1,4 @@
-package com.aegamesi.mc.mcnsachat3;
+package com.aegamesi.mc.mcnsachat3.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

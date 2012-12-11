@@ -1,0 +1,68 @@
+package com.aegamesi.mc.mcnsachat3.plugin.managers;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
+import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
+
+public class PlayerHandler implements Listener {
+	public MCNSAChat3 plugin;
+
+	public PlayerHandler(MCNSAChat3 plugin) {
+		this.plugin = plugin;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void loginHandler(PlayerLoginEvent evt) {
+		// see if they are allowed to login
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void joinHandler(PlayerJoinEvent evt) {
+		evt.setJoinMessage("");
+
+		ChatPlayer p = new ChatPlayer(evt.getPlayer().getName(), plugin.name);
+		MCNSAChat3.players.add(p);
+		if (plugin.thread != null)
+			plugin.thread.write(new PlayerJoinedPacket(p));
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void quitHandler(PlayerQuitEvent evt) {
+		evt.setQuitMessage("");
+
+		ChatPlayer p = new ChatPlayer(evt.getPlayer().getName(), plugin.name);
+		MCNSAChat3.players.remove(p);
+		if (plugin.thread != null)
+			plugin.thread.write(new PlayerLeftPacket(p));
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void chatHandler(AsyncPlayerChatEvent evt) {
+		if (evt.isCancelled())
+			return;
+		evt.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void preprocessHandler(PlayerCommandPreprocessEvent evt) {
+		if (evt.isCancelled())
+			return;
+
+		// TODO handle commands
+		/*
+		 * if (false) plugin.commandManager.handleCommand(event.getPlayer(),
+		 * event.getMessage())) evt.setCancelled(true);
+		 */
+	}
+}

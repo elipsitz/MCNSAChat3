@@ -4,31 +4,27 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import com.aegamesi.mc.mcnsachat3.things.PlayerThing;
+import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 
 public class PlayerLeftPacket implements IPacket {
 	public static final short id = 4;
 
-	public PlayerThing player = null;
-	public String server = null;
+	public ChatPlayer player = null;
 
 	public PlayerLeftPacket() {
 	}
 
-	public PlayerLeftPacket(PlayerThing player, String server) {
+	public PlayerLeftPacket(ChatPlayer player) {
 		this.player = player;
-		this.server = server;
 	}
 
 	public void write(DataOutputStream out) throws IOException {
 		out.writeShort(id);
 		player.write(out);
-		out.writeUTF(server);
 		out.flush();
 	}
 
 	public void read(DataInputStream in) throws IOException {
-		player = PlayerThing.read(in);
-		server = in.readUTF();
+		player = ChatPlayer.read(in);
 	}
 }

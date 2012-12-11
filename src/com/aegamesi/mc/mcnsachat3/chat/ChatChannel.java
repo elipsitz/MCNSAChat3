@@ -1,12 +1,12 @@
-package com.aegamesi.mc.mcnsachat3.things;
+package com.aegamesi.mc.mcnsachat3.chat;
 
 import java.util.ArrayList;
 
-public class ChannelThing {
+public class ChatChannel {
 	public String name;
 	public ArrayList<ChannelMode> modes;
 	
-	public ChannelThing(String name) {
+	public ChatChannel(String name) {
 		this.name = name;
 		this.modes = new ArrayList<ChannelMode>();
 	}
