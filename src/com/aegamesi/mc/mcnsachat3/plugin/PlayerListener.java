@@ -1,4 +1,4 @@
-package com.aegamesi.mc.mcnsachat3.plugin.managers;
+package com.aegamesi.mc.mcnsachat3.plugin;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,14 +10,14 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
-import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 
-public class PlayerHandler implements Listener {
+public class PlayerListener implements Listener {
 	public MCNSAChat3 plugin;
 
-	public PlayerHandler(MCNSAChat3 plugin) {
+	public PlayerListener(MCNSAChat3 plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -32,7 +32,7 @@ public class PlayerHandler implements Listener {
 		evt.setJoinMessage("");
 
 		ChatPlayer p = new ChatPlayer(evt.getPlayer().getName(), plugin.name);
-		MCNSAChat3.players.add(p);
+		PlayerManager.players.add(p);
 		if (plugin.thread != null)
 			plugin.thread.write(new PlayerJoinedPacket(p));
 	}
@@ -42,7 +42,7 @@ public class PlayerHandler implements Listener {
 		evt.setQuitMessage("");
 
 		ChatPlayer p = new ChatPlayer(evt.getPlayer().getName(), plugin.name);
-		MCNSAChat3.players.remove(p);
+		PlayerManager.removePlayer(p);
 		if (plugin.thread != null)
 			plugin.thread.write(new PlayerLeftPacket(p));
 	}
@@ -51,7 +51,7 @@ public class PlayerHandler implements Listener {
 	public void chatHandler(AsyncPlayerChatEvent evt) {
 		if (evt.isCancelled())
 			return;
-		evt.setCancelled(true);
+		//evt.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

@@ -1,37 +1,32 @@
 package com.aegamesi.mc.mcnsachat3.plugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
-import com.aegamesi.mc.mcnsachat3.plugin.managers.PlayerHandler;
+import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
+import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 
 public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	public ClientThread thread = null;
 	public String name;
 
-	public PlayerHandler pHandler;
-
-	public static HashMap<String, ChatChannel> channels;
-	public static ArrayList<ChatPlayer> players;
+	public PlayerListener pHandler;
 
 	public void onEnable() {
 		saveDefaultConfig();
 
 		name = getConfig().getString("name");
-		pHandler = new PlayerHandler(this);
-
-		channels = new HashMap<String, ChatChannel>();
-		players = new ArrayList<ChatPlayer>();
-		for(Player player : Bukkit.getOnlinePlayers()) {
+		pHandler = new PlayerListener(this);
+		PlayerManager.init();
+		ChannelManager.init();
+		
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			ChatPlayer p = new ChatPlayer(player.getName(), name);
-			MCNSAChat3.players.add(p);
+			PlayerManager.players.add(p);
+			// XXX figure out a way to save channel state/positions
 		}
 
 		// start connecting to server

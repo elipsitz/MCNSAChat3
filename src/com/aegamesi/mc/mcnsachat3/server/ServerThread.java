@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
@@ -42,23 +43,24 @@ public class ServerThread extends Thread {
 			Server.broadcast(packet);
 			name = packet.shortName;
 			log("Server joined: " + name);
-			Server.players.addAll(packet.players);
+			PlayerManager.players.addAll(packet.players);
 			String msg = "";
-			for(ChatPlayer player : packet.players)
+			for (ChatPlayer player : packet.players)
 				msg += player.name + " ";
 			log("Players added: " + msg);
-			// TODO add players and channels from server
-			// TODO send players and channels from other servers
+			// send the servers
+			for (ServerThread thread : Server.threads) {
+				if(thread == this)
+					continue;
+				write(new ServerJoinedPacket(thread.name, PlayerManager.getPlayersByServer(thread.name)));
+			}
 			return true;
 		}
-		// on server left
-		// TODO remove players from server
-		// TODO send removed players to other servers
 		if (type == PlayerJoinedPacket.id) {
 			PlayerJoinedPacket packet = new PlayerJoinedPacket();
 			packet.read(in);
 			Server.broadcast(packet);
-			Server.players.add(packet.player);
+			PlayerManager.players.add(packet.player);
 			log(packet.player.name + " joined " + packet.player.server);
 			return true;
 		}
@@ -66,37 +68,34 @@ public class ServerThread extends Thread {
 			PlayerLeftPacket packet = new PlayerLeftPacket();
 			packet.read(in);
 			Server.broadcast(packet);
-			Server.players.remove(packet.player);
+			PlayerManager.removePlayer(packet.player);
 			log(packet.player.name + " left " + packet.player.server);
 			return true;
 		}
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void run() {
 		try {
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new DataInputStream(socket.getInputStream());
-			while (loop(in, out));
+			while (loop(in, out))
+				;
 		} catch (Exception e) {
 			log("Connection lost.");
 			Server.threads.remove(this);
 			return;
 		} finally {
 			try {
-				ArrayList<ChatPlayer> playersLost = new ArrayList<ChatPlayer>();
-				ArrayList<ChatPlayer> players = (ArrayList<ChatPlayer>) Server.players.clone();
+				ArrayList<ChatPlayer> playersLost = PlayerManager.getPlayersByServer(name);
 				String msg = "";
-				for (ChatPlayer p : players) {
-					if (!p.server.equals(name)) {
-						msg += p.name + " ";
-						Server.players.remove(p);
-					}
+				for (ChatPlayer p : playersLost) {
+					msg += p.name + " ";
+					PlayerManager.players.remove(p);
 				}
 				log("Players lost: " + msg);
-				Server.broadcast(new ServerLeftPacket(name, playersLost));
-				
+				Server.broadcast(new ServerLeftPacket(name));
+
 				if (out != null)
 					out.close();
 				if (in != null)

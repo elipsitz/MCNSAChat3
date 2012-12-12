@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
@@ -51,24 +52,18 @@ public class ClientThread extends Thread {
 		log.info("Connected to chat server.");
 
 		try {
-			ArrayList<ChatPlayer> localPlayers = new ArrayList<ChatPlayer>();
-			for (ChatPlayer p : MCNSAChat3.players)
-				if (p.server.equals(plugin.name))
-					localPlayers.add(p);
-			System.out.println(MCNSAChat3.players.size());
-			ServerJoinedPacket joinPacket = new ServerJoinedPacket(plugin.name, localPlayers);
-			joinPacket.write(out);
-
+			new ServerJoinedPacket(plugin.name, PlayerManager.getPlayersByServer(plugin.name)).write(out);
+			
 			while (loop(in, out))
 				;
 		} catch (Exception e) {
 			log.warning("Chat server: connection lost?");
 			String msg = "";
-			ArrayList<ChatPlayer> players = (ArrayList<ChatPlayer>) MCNSAChat3.players.clone();
+			ArrayList<ChatPlayer> players = (ArrayList<ChatPlayer>) PlayerManager.players.clone();
 			for (ChatPlayer p : players) {
 				if (!p.server.equals(plugin.name)) {
 					msg += p.name + " ";
-					MCNSAChat3.players.remove(p);
+					PlayerManager.players.remove(p);
 				}
 			}
 			log.warning("Players lost: " + msg);
@@ -105,7 +100,7 @@ public class ClientThread extends Thread {
 				msg += p.name + " ";
 			log.info("Players joined: " + msg);
 
-			MCNSAChat3.players.addAll(packet.players);
+			PlayerManager.players.addAll(packet.players);
 			return true;
 		}
 		if (type == ServerLeftPacket.id) {
@@ -116,12 +111,13 @@ public class ClientThread extends Thread {
 
 			// log + notify
 			log.info("Server left " + packet.shortName);
+			ArrayList<ChatPlayer> playersLost = PlayerManager.getPlayersByServer(packet.shortName);
 			String msg = "";
-			for (ChatPlayer p : packet.players)
+			for (ChatPlayer p : playersLost) {
 				msg += p.name + " ";
+				PlayerManager.players.remove(p);
+			}
 			log.info("Players left: " + msg);
-
-			MCNSAChat3.players.removeAll(packet.players);
 			return true;
 		}
 		if (type == PlayerJoinedPacket.id) {
@@ -133,7 +129,7 @@ public class ClientThread extends Thread {
 			// log + notify
 			log.info("Player joined " + packet.player.name + " from " + packet.player.server);
 
-			MCNSAChat3.players.add(packet.player);
+			PlayerManager.players.add(packet.player);
 			return true;
 		}
 		if (type == PlayerLeftPacket.id) {
@@ -145,7 +141,7 @@ public class ClientThread extends Thread {
 			// log + notify
 			log.info("Player left" + packet.player.name + " from " + packet.player.server);
 
-			MCNSAChat3.players.remove(packet.player);
+			PlayerManager.removePlayer(packet.player);
 			return true;
 		}
 		return false;

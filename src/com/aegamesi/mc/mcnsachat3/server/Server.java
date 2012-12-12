@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
-import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
+import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 
 public class Server {
 	public static ArrayList<ServerThread> threads;
-	public static HashMap<String, ChatChannel> channels;
-	public static ArrayList<ChatPlayer> players;
 
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = null;
@@ -21,8 +18,8 @@ public class Server {
 		int port = 51325;
 		
 		threads = new ArrayList<ServerThread>();
-		channels = new HashMap<String, ChatChannel>();
-		players = new ArrayList<ChatPlayer>();
+		PlayerManager.init();
+		ChannelManager.init();
 		
 		System.out.println("MCNSAChat3 Server");
 		System.out.println("Server Started on port " + port);
