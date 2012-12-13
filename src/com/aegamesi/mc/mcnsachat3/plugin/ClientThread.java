@@ -22,7 +22,6 @@ public class ClientThread extends Thread {
 	public Socket socket = null;
 	public DataOutputStream out = null;
 	public DataInputStream in = null;
-	public boolean run = true;
 	public boolean connected = false;
 
 	public MCNSAChat3 plugin;
@@ -59,7 +58,7 @@ public class ClientThread extends Thread {
 			
 			while (loop(in, out))
 				;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log.warning("Chat server: connection lost?");
 			String msg = "";
 			ArrayList<ChatPlayer> players = (ArrayList<ChatPlayer>) PlayerManager.players.clone();

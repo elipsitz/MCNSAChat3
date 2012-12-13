@@ -1,5 +1,7 @@
 package com.aegamesi.mc.mcnsachat3.plugin;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -26,7 +28,7 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			ChatPlayer p = new ChatPlayer(player.getName(), name);
 			PlayerManager.players.add(p);
-			// XXX figure out a way to save channel state/positions
+			// TODO figure out a way to save channel state/positions
 		}
 
 		// start connecting to server
@@ -42,8 +44,12 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	}
 
 	public void onDisable() {
-		getLogger().info("Disconnecting from chat server.");
-		if (thread != null)
-			thread.run = false;
+		getLogger().info("Socket is being closed NOW!");
+		try {
+			thread.socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		thread = null;
 	}
 }

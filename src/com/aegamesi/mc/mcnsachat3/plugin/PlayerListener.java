@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -51,7 +52,16 @@ public class PlayerListener implements Listener {
 	public void chatHandler(AsyncPlayerChatEvent evt) {
 		if (evt.isCancelled())
 			return;
-		//evt.setCancelled(true);
+		// evt.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void tabCompleteHandler(PlayerChatTabCompleteEvent evt) {
+		// TODO ...
+		evt.getTabCompletions().clear();
+		for (int i = 0; i < 3; i++)
+			evt.getTabCompletions().add(Integer.toString(((int) (Math.random() * 100))));
+		evt.getPlayer().sendMessage("\"" + evt.getChatMessage() + "\"");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

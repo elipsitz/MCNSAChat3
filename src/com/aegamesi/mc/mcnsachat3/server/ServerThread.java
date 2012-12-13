@@ -80,6 +80,7 @@ public class ServerThread extends Thread {
 			}
 			// okay, now send the updated list to everybody
 			Server.broadcast(new ChannelListingPacket(ChannelManager.channels));
+			return true;
 		}
 		if (type == PlayerJoinedPacket.id) {
 			PlayerJoinedPacket packet = new PlayerJoinedPacket();
@@ -106,7 +107,7 @@ public class ServerThread extends Thread {
 			in = new DataInputStream(socket.getInputStream());
 			while (loop(in, out))
 				;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log("Connection lost.");
 			Server.threads.remove(this);
 			return;
