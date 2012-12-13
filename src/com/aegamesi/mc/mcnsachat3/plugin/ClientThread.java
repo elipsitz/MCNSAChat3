@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
+import com.aegamesi.mc.mcnsachat3.packets.ChannelListingPacket;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
@@ -53,6 +55,7 @@ public class ClientThread extends Thread {
 
 		try {
 			new ServerJoinedPacket(plugin.name, PlayerManager.getPlayersByServer(plugin.name)).write(out);
+			new ChannelListingPacket(ChannelManager.channels).write(out);
 			
 			while (loop(in, out))
 				;
@@ -118,6 +121,15 @@ public class ClientThread extends Thread {
 				PlayerManager.players.remove(p);
 			}
 			log.info("Players left: " + msg);
+			return true;
+		}
+		if (type == ChannelListingPacket.id) {
+			ChannelListingPacket packet = new ChannelListingPacket();
+			packet.read(in);
+
+			// log + notify
+			log.info("Received updated channel list");
+			ChannelManager.channels = packet.channels;
 			return true;
 		}
 		if (type == PlayerJoinedPacket.id) {

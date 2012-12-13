@@ -5,9 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 
+import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
+import com.aegamesi.mc.mcnsachat3.packets.ChannelListingPacket;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
@@ -41,8 +45,8 @@ public class ServerThread extends Thread {
 			ServerJoinedPacket packet = new ServerJoinedPacket();
 			packet.read(in);
 			Server.broadcast(packet);
+			log("Server joined: " + packet.shortName);
 			name = packet.shortName;
-			log("Server joined: " + name);
 			PlayerManager.players.addAll(packet.players);
 			String msg = "";
 			for (ChatPlayer player : packet.players)
@@ -55,6 +59,27 @@ public class ServerThread extends Thread {
 				write(new ServerJoinedPacket(thread.name, PlayerManager.getPlayersByServer(thread.name)));
 			}
 			return true;
+		}
+		if (type == ChannelListingPacket.id) {
+			ChannelListingPacket packet = new ChannelListingPacket();
+			packet.read(in);
+			log("Received channel listing");
+			// merge with current list
+			for(ChatChannel channel : packet.channels) {
+				ChatChannel old = ChannelManager.getChannel(channel.name);
+				if(old == null) {
+					ChannelManager.channels.add(channel);
+				} else {
+					HashSet<ChatChannel.Mode> duplicateRemover = new HashSet<ChatChannel.Mode>();
+					duplicateRemover.addAll(old.modes);
+					duplicateRemover.addAll(channel.modes);
+					old.modes.clear();
+					old.modes.addAll(duplicateRemover);
+					// XXX in the future, merge other properties too
+				}
+			}
+			// okay, now send the updated list to everybody
+			Server.broadcast(new ChannelListingPacket(ChannelManager.channels));
 		}
 		if (type == PlayerJoinedPacket.id) {
 			PlayerJoinedPacket packet = new PlayerJoinedPacket();
