@@ -57,11 +57,17 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void tabCompleteHandler(PlayerChatTabCompleteEvent evt) {
-		// TODO ...
-		evt.getTabCompletions().clear();
-		for (int i = 0; i < 3; i++)
-			evt.getTabCompletions().add(Integer.toString(((int) (Math.random() * 100))));
-		evt.getPlayer().sendMessage("\"" + evt.getChatMessage() + "\"");
+		if(evt.getChatMessage().startsWith("/") && evt.getChatMessage().indexOf(" ") < 0) {
+			// it's a command
+			return;
+		} else {
+			evt.getTabCompletions().clear();
+			String token = evt.getLastToken().toLowerCase();
+			for(ChatPlayer player : PlayerManager.players) {
+				if(player.name.toLowerCase().startsWith(token))
+					evt.getTabCompletions().add(player.name);
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
