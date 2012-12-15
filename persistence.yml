@@ -1,0 +1,4 @@
+players:
+    - name: PickleMan
+      channel: G
+      listening: [Server_Broadcast, Network_Broadcast]

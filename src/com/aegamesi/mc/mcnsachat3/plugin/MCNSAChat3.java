@@ -16,15 +16,18 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	public String name;
 
 	public PlayerListener pHandler;
+	public static Persistence persist;
 
 	public void onEnable() {
+		persist = new Persistence(this);
+		persist.saveDefault();
 		saveDefaultConfig();
 
 		name = getConfig().getString("name");
 		pHandler = new PlayerListener(this);
 		PlayerManager.init();
 		ChannelManager.init();
-		
+
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			ChatPlayer p = new ChatPlayer(player.getName(), name);
 			PlayerManager.players.add(p);
@@ -44,12 +47,15 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	}
 
 	public void onDisable() {
-		getLogger().info("Socket is being closed NOW!");
-		try {
-			thread.socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		persist.save();
+		if (thread != null && thread.socket != null) {
+			getLogger().info("Socket is being closed NOW!");
+			try {
+				thread.socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			thread = null;
 		}
-		thread = null;
 	}
 }

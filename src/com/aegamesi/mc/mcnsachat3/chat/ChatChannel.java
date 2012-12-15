@@ -15,7 +15,7 @@ public class ChatChannel {
 	}
 
 	public enum Mode {
-		LOCKDOWN, LOCAL, HIDDEN;
+		LOCKED, LOCAL, HIDDEN, MUTE;
 	}
 	
 	public void write(DataOutputStream out) throws IOException {

@@ -1,1 +1,29 @@
 name: default
+default-channel: G
+default-listen: [Server_Broadcast, Network_Broadcast]
+
+hard-channels:
+    - name: G
+      modes: []
+
+    - name: Server_Broadcast
+      modes: [LOCKED, HIDDEN, LOCAL]
+      permission: broadcast
+
+    - name: Network_Broadcast
+      modes: [LOCKED, HIDDEN]
+      permission: broadcast
+      
+    - name: ADMIN
+      modes: [HIDDEN]
+      permission: admin
+      
+    - name: MOD
+      modes: [HIDDEN]
+      permission: mod
+
+      
+# permissions are like, mcnsachat3.ext.admin or such
+# permissions to add: ignorelocked, ignoremute
+# also, store chat persist (channels and their modes, players and their channels and modes... in a yml file)
+# server only stores channels, client only stores players
