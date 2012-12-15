@@ -7,11 +7,15 @@ import java.util.ArrayList;
 
 public class ChatChannel {
 	public String name;
+	public String read_permission;
+	public String write_permission;
 	public ArrayList<Mode> modes;
 	
 	public ChatChannel(String name) {
 		this.name = name;
 		this.modes = new ArrayList<Mode>();
+		this.read_permission = "";
+		this.write_permission = "";
 	}
 
 	public enum Mode {
@@ -20,6 +24,8 @@ public class ChatChannel {
 	
 	public void write(DataOutputStream out) throws IOException {
 		out.writeUTF(name);
+		out.writeUTF(read_permission);
+		out.writeUTF(write_permission);
 		out.writeInt(modes.size());
 		for(Mode mode : modes)
 			out.writeUTF(mode.name());
@@ -27,6 +33,8 @@ public class ChatChannel {
 	
 	public static ChatChannel read(DataInputStream in) throws IOException {
 		String name = in.readUTF();
+		String read_permission = in.readUTF();
+		String write_permission = in.readUTF();
 		ArrayList<Mode> modes = new ArrayList<Mode>();
 		int size = in.readInt();
 		for(int i = 0; i < size; i++)
@@ -34,6 +42,8 @@ public class ChatChannel {
 		
 		ChatChannel chan = new ChatChannel(name);
 		chan.modes = modes;
+		chan.read_permission = read_permission;
+		chan.write_permission = write_permission;
 		return chan;
 	}
 }

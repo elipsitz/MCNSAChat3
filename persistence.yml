@@ -1,4 +1,24 @@
-players:
-    - name: PickleMan
-      channel: G
-      listening: [Server_Broadcast, Network_Broadcast]
+channels:
+- name: G
+  modes: []
+- name: Server_Broadcast
+  modes:
+  - LOCKED
+  - HIDDEN
+  - LOCAL
+  write_permission: broadcast
+- name: Network_Broadcast
+  modes:
+  - LOCKED
+  - HIDDEN
+  write_permission: broadcast
+- name: ADMIN
+  modes:
+  - HIDDEN
+  read_permission: admin
+  write_permission: admin
+- name: MOD
+  modes:
+  - HIDDEN
+  read_permission: mod
+  write_permission: mod

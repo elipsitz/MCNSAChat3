@@ -63,7 +63,7 @@ public class ServerThread extends Thread {
 		if (type == ChannelListingPacket.id) {
 			ChannelListingPacket packet = new ChannelListingPacket();
 			packet.read(in);
-			log("Received channel listing");
+			log("Received channel listing. Size: " + packet.channels.size());
 			// merge with current list
 			for(ChatChannel channel : packet.channels) {
 				ChatChannel old = ChannelManager.getChannel(channel.name);

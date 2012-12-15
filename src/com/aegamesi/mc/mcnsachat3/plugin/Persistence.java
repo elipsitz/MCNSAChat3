@@ -2,7 +2,6 @@ package com.aegamesi.mc.mcnsachat3.plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,13 +21,6 @@ public class Persistence {
 			customConfigFile = new File(plugin.getDataFolder(), "persistence.yml");
 		}
 		customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
-
-		// Look for defaults in the jar
-		InputStream defConfigStream = plugin.getResource("persistence.yml");
-		if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-			customConfig.setDefaults(defConfig);
-		}
 	}
 
 	public FileConfiguration get() {
@@ -36,6 +28,10 @@ public class Persistence {
 			this.reload();
 		}
 		return customConfig;
+	}
+	
+	public void clear() {
+		customConfig = new YamlConfiguration();
 	}
 
 	public void save() {
@@ -50,9 +46,7 @@ public class Persistence {
 	}
 
 	public void saveDefault() {
-		if (customConfigFile == null)
-			reload();
-		if (!customConfigFile.exists()) {
+		if (!(new File(plugin.getDataFolder(), "persistence.yml")).exists()) {
 			this.plugin.saveResource("persistence.yml", false);
 		}
 	}
