@@ -1,3 +1,4 @@
 name: MCNSAChat3
 main: com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3
 version: 1.0.0.1
+depend: [PermissionsEx]

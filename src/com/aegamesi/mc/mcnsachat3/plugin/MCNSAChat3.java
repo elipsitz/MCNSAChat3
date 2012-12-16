@@ -12,6 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import ru.tehkode.permissions.PermissionManager;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
+
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel.Mode;
@@ -24,6 +27,7 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 
 	public PlayerListener pHandler;
 	public static Persistence persist;
+	public static PermissionManager permissions;
 
 	public void onEnable() {
 		persist = new Persistence(this);
@@ -34,6 +38,8 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 		pHandler = new PlayerListener(this);
 		PlayerManager.init();
 		ChannelManager.init();
+		PluginUtil.plugin = this;
+		permissions = PermissionsEx.getPermissionManager();
 
 		loadPlayers();
 		loadChannels();

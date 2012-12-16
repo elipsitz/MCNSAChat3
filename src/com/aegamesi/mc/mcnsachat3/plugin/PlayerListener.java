@@ -51,6 +51,8 @@ public class PlayerListener implements Listener {
 		PlayerManager.players.add(p);
 		if (plugin.thread != null)
 			plugin.thread.write(new PlayerJoinedPacket(p));
+		// tell *everybody!*
+		PluginUtil.send(PluginUtil.formatUser(evt.getPlayer().getName()) + " &ehas joined the game!");
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -66,6 +68,8 @@ public class PlayerListener implements Listener {
 		// network
 		if (plugin.thread != null)
 			plugin.thread.write(new PlayerLeftPacket(p));
+		// tell *everybody!*
+		PluginUtil.send(PluginUtil.formatUser(evt.getPlayer().getName()) + " &ehas left the game!");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

@@ -55,7 +55,7 @@ public class ClientThread extends Thread {
 		try {
 			new ServerJoinedPacket(plugin.name, PlayerManager.getPlayersByServer(plugin.name)).write(out);
 			new ChannelListingPacket(ChannelManager.channels).write(out);
-			
+
 			while (loop(in, out))
 				;
 		} catch (IOException e) {
@@ -103,6 +103,7 @@ public class ClientThread extends Thread {
 			log.info("Players joined: " + msg);
 
 			PlayerManager.players.addAll(packet.players);
+			// TODO server join/left message (broadcast)
 			return true;
 		}
 		if (type == ServerLeftPacket.id) {
@@ -139,6 +140,7 @@ public class ClientThread extends Thread {
 
 			// log + notify
 			log.info("Player joined " + packet.player.name + " from " + packet.player.server);
+			PluginUtil.sendLater(PluginUtil.formatUser(packet.player.name) + " &ehas joined &7" + packet.player.server + "!");
 
 			PlayerManager.players.add(packet.player);
 			return true;
@@ -151,6 +153,7 @@ public class ClientThread extends Thread {
 
 			// log + notify
 			log.info("Player left" + packet.player.name + " from " + packet.player.server);
+			PluginUtil.sendLater(PluginUtil.formatUser(packet.player.name) + " &ehas left &7" + packet.player.server + "!");
 
 			PlayerManager.removePlayer(packet.player);
 			return true;
