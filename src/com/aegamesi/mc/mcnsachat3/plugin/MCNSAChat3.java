@@ -43,6 +43,15 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 
 		loadPlayers();
 		loadChannels();
+		
+		// set up colored ranks and stuff
+		Player[] players = getServer().getOnlinePlayers();
+		for(int i = 0; i < players.length; i++) {			
+			String result = PluginUtil.formatUser(players[i].getName());
+			if(result.length() > 16)
+				result = result.substring(0, 16);
+			players[i].setPlayerListName(result);
+		}
 
 		// start connecting to server
 		final MCNSAChat3 finalThis = this;
@@ -107,7 +116,6 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 			chanMap.add(chan);
 		}
 		persist.get().set("channels", chanMap);
-		// TODO move players, channels to persist
 		persist.save();
 
 		if (thread != null && thread.socket != null) {

@@ -15,11 +15,12 @@ import com.aegamesi.mc.mcnsachat3.packets.ChannelListingPacket;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerLeftPacket;
 
 public class ServerThread extends Thread {
-	private Socket socket = null;
+	public Socket socket = null;
 	public DataOutputStream out = null;
 	public DataInputStream in = null;
 	public String name = "";
@@ -53,11 +54,7 @@ public class ServerThread extends Thread {
 				msg += player.name + " ";
 			log("Players added: " + msg);
 			// send the servers
-			for (ServerThread thread : Server.threads) {
-				if(thread == this)
-					continue;
-				write(new ServerJoinedPacket(thread.name, PlayerManager.getPlayersByServer(thread.name)));
-			}
+			Server.broadcast(new ServerJoinedPacket(name, PlayerManager.getPlayersByServer(name)));
 			return true;
 		}
 		if (type == ChannelListingPacket.id) {
@@ -65,9 +62,9 @@ public class ServerThread extends Thread {
 			packet.read(in);
 			log("Received channel listing. Size: " + packet.channels.size());
 			// merge with current list
-			for(ChatChannel channel : packet.channels) {
+			for (ChatChannel channel : packet.channels) {
 				ChatChannel old = ChannelManager.getChannel(channel.name);
-				if(old == null) {
+				if (old == null) {
 					ChannelManager.channels.add(channel);
 				} else {
 					HashSet<ChatChannel.Mode> duplicateRemover = new HashSet<ChatChannel.Mode>();
@@ -98,6 +95,15 @@ public class ServerThread extends Thread {
 			log(packet.player.name + " left " + packet.player.server);
 			return true;
 		}
+		if (type == PlayerUpdatePacket.id) {
+			PlayerUpdatePacket packet = new PlayerUpdatePacket();
+			packet.read(in);
+			Server.broadcast(packet);
+			PlayerManager.removePlayer(packet.player);
+			PlayerManager.players.add(packet.player);
+			log(packet.player.name + " updated on " + packet.player.server);
+			return true;
+		}
 		return false;
 	}
 
@@ -109,6 +115,7 @@ public class ServerThread extends Thread {
 				;
 		} catch (IOException e) {
 			log("Connection lost.");
+
 			Server.threads.remove(this);
 			return;
 		} finally {
@@ -127,6 +134,7 @@ public class ServerThread extends Thread {
 				if (in != null)
 					in.close();
 				socket.close();
+
 				Server.threads.remove(this);
 			} catch (IOException e) {
 				log("Error closing socket");

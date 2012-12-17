@@ -48,11 +48,19 @@ public class PlayerListener implements Listener {
 			p.channel = plugin.getConfig().getString("default-channel");
 			p.listening.addAll((List<String>) plugin.getConfig().getList("default-listen"));
 		}
+
 		PlayerManager.players.add(p);
 		if (plugin.thread != null)
 			plugin.thread.write(new PlayerJoinedPacket(p));
 		// tell *everybody!*
-		PluginUtil.send(PluginUtil.formatUser(evt.getPlayer().getName()) + " &ehas joined the game!");
+		PluginUtil.send(PluginUtil.formatUser(evt.getPlayer().getName()) + " &ehas joined &7" + plugin.name + "&e!");
+
+		// welcome them, send list of players, set colored name
+		String result = PluginUtil.formatUser(evt.getPlayer().getName());
+		if (result.length() > 16)
+			result = result.substring(0, 16);
+		evt.getPlayer().setPlayerListName(result);
+		PluginUtil.send(evt.getPlayer().getName(), PluginUtil.getPlayerList());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -69,7 +77,7 @@ public class PlayerListener implements Listener {
 		if (plugin.thread != null)
 			plugin.thread.write(new PlayerLeftPacket(p));
 		// tell *everybody!*
-		PluginUtil.send(PluginUtil.formatUser(evt.getPlayer().getName()) + " &ehas left the game!");
+		PluginUtil.send(PluginUtil.formatUser(evt.getPlayer().getName()) + " &ehas left &7" + plugin.name + "&e!");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

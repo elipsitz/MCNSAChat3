@@ -1,24 +1,18 @@
-package com.aegamesi.mc.mcnsachat3.plugin;
+package com.aegamesi.mc.mcnsachat3.server;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Persistence {
+public class ServerPersistence {
 	private FileConfiguration customConfig = null;
 	private File customConfigFile = null;
-	private MCNSAChat3 plugin = null;
-
-	public Persistence(MCNSAChat3 plugin) {
-		this.plugin = plugin;
-	}
 
 	public void reload() {
 		if (customConfigFile == null)
-			customConfigFile = new File(plugin.getDataFolder(), "persistence.yml");
+			customConfigFile = new File("server_persistence.yml");
 		customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
 	}
 
@@ -38,13 +32,7 @@ public class Persistence {
 		try {
 			get().save(customConfigFile);
 		} catch (IOException ex) {
-			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + customConfigFile, ex);
-		}
-	}
-
-	public void saveDefault() {
-		if (!(new File(plugin.getDataFolder(), "persistence.yml")).exists()) {
-			this.plugin.saveResource("persistence.yml", false);
+			System.out.println("Could not save config to " + customConfigFile);
 		}
 	}
 }

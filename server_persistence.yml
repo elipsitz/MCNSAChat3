@@ -1,8 +1,4 @@
 channels:
-- write_permission: U
-  read_permission: U
-  name: U
-  modes: []
 - write_permission: ''
   read_permission: ''
   name: G
@@ -12,15 +8,15 @@ channels:
   read_permission: ''
   name: Server_Broadcast
   modes:
-  - LOCAL
-  - LOCKED
   - HIDDEN
+  - LOCKED
+  - LOCAL
 - write_permission: broadcast
   read_permission: ''
   name: Network_Broadcast
   modes:
-  - LOCKED
   - HIDDEN
+  - LOCKED
 - write_permission: admin
   read_permission: admin
   name: ADMIN
@@ -31,3 +27,7 @@ channels:
   name: MOD
   modes:
   - HIDDEN
+- write_permission: U
+  read_permission: U
+  name: U
+  modes: []
