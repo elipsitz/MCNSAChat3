@@ -6,3 +6,5 @@ default-listen: [G, Server_Broadcast, Network_Broadcast]
 # permissions to add: ignorelocked, ignoremute
 # also, store chat persist (channels and their modes, players and their channels and modes... in a yml file)
 # server only stores channels, client only stores players
+
+# permissions so far: mcnsachat3.user.cancolor

@@ -74,6 +74,8 @@ public class Server {
 			ChatChannel c = new ChatChannel((String) channel.get("name"));
 			c.read_permission = (String) (channel.containsKey("read_permission") ? channel.get("read_permission") : "");
 			c.write_permission = (String) (channel.containsKey("write_permission") ? channel.get("write_permission") : "");
+			c.alias = (String) (channel.containsKey("alias") ? channel.get("alias") : "");
+			c.color = (String) (channel.containsKey("color") ? channel.get("color") : "");
 			List<String> modes = (List<String>) channel.get("modes");
 			for (String mode : modes)
 				c.modes.add(Mode.valueOf(mode));
@@ -88,6 +90,8 @@ public class Server {
 			chan.put("name", c.name);
 			chan.put("read_permission", c.read_permission);
 			chan.put("write_permission", c.write_permission);
+			chan.put("alias", c.alias);
+			chan.put("color", c.color);
 			ArrayList<String> modes = new ArrayList<String>();
 			for (ChatChannel.Mode mode : c.modes)
 				modes.add(mode.name());

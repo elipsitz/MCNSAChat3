@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
 
@@ -84,7 +85,13 @@ public class PlayerListener implements Listener {
 	public void chatHandler(AsyncPlayerChatEvent evt) {
 		if (evt.isCancelled())
 			return;
-		// evt.setCancelled(true);
+		evt.setCancelled(true);
+		ChatPlayer player = PlayerManager.getPlayer(evt.getPlayer().getName(), plugin.name);
+		// XXX blah blah check some stuff, like timeout maybe? are they allowed to chat?
+		plugin.chat.chat(player, evt.getMessage(), null);
+		// tell *everybody!*
+		if (plugin.thread != null)
+			plugin.thread.write(new PlayerChatPacket(player, evt.getMessage(), null));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

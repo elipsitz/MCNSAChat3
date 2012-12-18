@@ -13,9 +13,17 @@ public class PluginUtil {
 	public static String color(String str) {
 		return ChatColor.translateAlternateColorCodes('&', str);
 	}
+	
+	public static String stripColor(String str) {
+		return ChatColor.stripColor(color(str));
+	}
 
 	public static String formatUser(String user) {
 		return color(MCNSAChat3.permissions.getUser(user).getPrefix() + user);
+	}
+	
+	public static String formatRank(String user) {
+		return color(MCNSAChat3.permissions.getUser(user).getPrefix() + MCNSAChat3.permissions.getUser(user).getSuffix());
 	}
 
 	public static void send(String who, String message) {

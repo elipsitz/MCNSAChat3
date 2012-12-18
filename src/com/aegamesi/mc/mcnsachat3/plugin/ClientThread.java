@@ -12,7 +12,9 @@ import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 import com.aegamesi.mc.mcnsachat3.packets.ChannelListingPacket;
+import com.aegamesi.mc.mcnsachat3.packets.ChannelUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerUpdatePacket;
@@ -168,8 +170,29 @@ public class ClientThread extends Thread {
 			// log + notify
 			log.info("Updated player" + packet.player.name + " on " + packet.player.server);
 			// this usually signifies a mode change or channel change. We don't really care, however, as it is on another server
-			PlayerManager.players.remove(packet.player);
+			PlayerManager.removePlayer(packet.player);
 			PlayerManager.players.add(packet.player);
+			return true;
+		}
+		if (type == ChannelUpdatePacket.id) {
+			ChannelUpdatePacket packet = new ChannelUpdatePacket();
+			packet.read(in);
+
+			// log + notify
+			log.info("Updated channel" + packet.channel.name);
+			// this usually signifies a mode change or something
+			ChannelManager.removeChannel(packet.channel);
+			ChannelManager.channels.add(packet.channel);
+			return true;
+		}
+		if (type == PlayerChatPacket.id) {
+			PlayerChatPacket packet = new PlayerChatPacket();
+			packet.read(in);
+			if (packet.player.server.equals(plugin.name))
+				return true;
+
+			plugin.chat.chat(packet.player, packet.message, packet.channel);
+			return true;
 		}
 		return false;
 	}

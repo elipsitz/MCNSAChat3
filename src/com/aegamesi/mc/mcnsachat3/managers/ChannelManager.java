@@ -17,4 +17,18 @@ public class ChannelManager {
 				return chan;
 		return null;
 	}
+	
+	public static void removeChannel(String name) {
+		for (int i = 0; i < channels.size(); i++) {
+			ChatChannel chan = channels.get(i);
+			if (chan.name.equalsIgnoreCase(name)) {
+				channels.remove(chan);
+				break;
+			}
+		}
+	}
+
+	public static void removeChannel(ChatChannel chan) {
+		removeChannel(chan.name);
+	}
 }

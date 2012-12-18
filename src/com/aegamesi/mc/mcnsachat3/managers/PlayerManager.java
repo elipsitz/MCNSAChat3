@@ -6,7 +6,7 @@ import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 
 public class PlayerManager {
 	public static ArrayList<ChatPlayer> players;
-	
+
 	public static void init() {
 		players = new ArrayList<ChatPlayer>();
 	}
@@ -40,6 +40,14 @@ public class PlayerManager {
 		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
 		for (ChatPlayer play : players)
 			if (play.name.equalsIgnoreCase(name))
+				plays.add(play);
+		return plays;
+	}
+	
+	public static ArrayList<ChatPlayer> getPlayersListeningToChannel(String channel) {
+		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
+		for (ChatPlayer play : players)
+			if (play.listening.contains(channel))
 				plays.add(play);
 		return plays;
 	}

@@ -12,7 +12,9 @@ import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 import com.aegamesi.mc.mcnsachat3.packets.ChannelListingPacket;
+import com.aegamesi.mc.mcnsachat3.packets.ChannelUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.packets.IPacket;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerUpdatePacket;
@@ -54,7 +56,9 @@ public class ServerThread extends Thread {
 				msg += player.name + " ";
 			log("Players added: " + msg);
 			// send the servers
-			Server.broadcast(new ServerJoinedPacket(name, PlayerManager.getPlayersByServer(name)));
+			for (ServerThread thread : Server.threads)
+				if (thread != this)
+					write(new ServerJoinedPacket(thread.name, PlayerManager.getPlayersByServer(thread.name)));
 			return true;
 		}
 		if (type == ChannelListingPacket.id) {
@@ -102,6 +106,22 @@ public class ServerThread extends Thread {
 			PlayerManager.removePlayer(packet.player);
 			PlayerManager.players.add(packet.player);
 			log(packet.player.name + " updated on " + packet.player.server);
+			return true;
+		}
+		if (type == ChannelUpdatePacket.id) {
+			ChannelUpdatePacket packet = new ChannelUpdatePacket();
+			packet.read(in);
+			Server.broadcast(packet);
+			ChannelManager.removeChannel(packet.channel);
+			ChannelManager.channels.add(packet.channel);
+			log(packet.channel.name + " channel updated");
+			return true;
+		}
+		if (type == PlayerChatPacket.id) {
+			PlayerChatPacket packet = new PlayerChatPacket();
+			packet.read(in);
+			Server.broadcast(packet);
+			// TODO log this chat
 			return true;
 		}
 		return false;

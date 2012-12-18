@@ -3,14 +3,20 @@ channels:
   read_permission: U
   name: U
   modes: []
+  alias: u
+  color: 8
 - write_permission: ''
   read_permission: ''
   name: G
+  color: 7
+  alias: g
   modes:
   - LOCAL
 - write_permission: broadcast
   read_permission: ''
   name: Server_Broadcast
+  alias: lbc
+  color: 5
   modes:
   - LOCAL
   - LOCKED
@@ -18,16 +24,22 @@ channels:
 - write_permission: broadcast
   read_permission: ''
   name: Network_Broadcast
+  alias: nbc
+  color: 5
   modes:
   - LOCKED
   - HIDDEN
 - write_permission: admin
   read_permission: admin
   name: ADMIN
+  alias: a
+  color: a
   modes:
   - HIDDEN
 - write_permission: mod
   read_permission: mod
   name: MOD
+  alias: m
+  color: 5
   modes:
   - HIDDEN
