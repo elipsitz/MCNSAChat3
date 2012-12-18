@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
@@ -143,7 +144,16 @@ public class ClientThread extends Thread {
 
 			// log + notify
 			log.info("Player joined " + packet.player.name + " from " + packet.player.server);
-			PluginUtil.sendLater(PluginUtil.formatUser(packet.player.name) + " &ehas joined &7" + packet.player.server + "&e!");
+			if (!ChannelManager.getChannel(packet.player.channel).modes.contains(ChatChannel.Mode.LOCAL)) {
+				String joinString = plugin.getConfig().getString("strings.player-join");
+				joinString = joinString.replaceAll("%player%", PluginUtil.formatUser(packet.player.name));
+				joinString = joinString.replaceAll("%playernoformat%", packet.player.name);
+				joinString = joinString.replaceAll("%server%", plugin.name);
+				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
+				for (ChatPlayer p : toNotify)
+					if (p.server.equals(plugin.name))
+						PluginUtil.sendLater(p.name, joinString);
+			}
 
 			PlayerManager.players.add(packet.player);
 			return true;
@@ -156,8 +166,17 @@ public class ClientThread extends Thread {
 
 			// log + notify
 			log.info("Player left" + packet.player.name + " from " + packet.player.server);
-			PluginUtil.sendLater(PluginUtil.formatUser(packet.player.name) + " &ehas left &7" + packet.player.server + "&e!");
-
+			if (!ChannelManager.getChannel(packet.player.channel).modes.contains(ChatChannel.Mode.LOCAL)) {
+				String quitString = plugin.getConfig().getString("strings.player-quit");
+				quitString = quitString.replaceAll("%player%", PluginUtil.formatUser(packet.player.name));
+				quitString = quitString.replaceAll("%playernoformat%", packet.player.name);
+				quitString = quitString.replaceAll("%server%", plugin.name);
+				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
+				for (ChatPlayer p : toNotify)
+					if (p.server.equals(plugin.name))
+						PluginUtil.sendLater(p.name, quitString);
+			}
+			
 			PlayerManager.removePlayer(packet.player);
 			return true;
 		}
@@ -169,7 +188,8 @@ public class ClientThread extends Thread {
 
 			// log + notify
 			log.info("Updated player" + packet.player.name + " on " + packet.player.server);
-			// this usually signifies a mode change or channel change. We don't really care, however, as it is on another server
+			// this usually signifies a mode change or channel change. We don't
+			// really care, however, as it is on another server
 			PlayerManager.removePlayer(packet.player);
 			PlayerManager.players.add(packet.player);
 			return true;

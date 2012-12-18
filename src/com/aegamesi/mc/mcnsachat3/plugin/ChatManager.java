@@ -33,9 +33,9 @@ public class ChatManager {
 		for (ChatPlayer p : players) {
 			boolean send = false;
 			if(net)
-				send = Bukkit.getPlayerExact(p.name) != null && !p.server.equals(plugin.name);
+				send = Bukkit.getPlayerExact(p.name) != null && !p.server.equals(player.server);
 			else
-				send = Bukkit.getPlayerExact(p.name) != null && p.server.equals(plugin.name);
+				send = Bukkit.getPlayerExact(p.name) != null && p.server.equals(player.server);
 			if (send) {
 				PluginUtil.sendLater(p.name, message);
 			}

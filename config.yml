@@ -1,6 +1,10 @@
 name: default
 default-channel: G
 default-listen: [G, Server_Broadcast, Network_Broadcast]
+strings:
+  player-welcome: '&aWelcome &e%player% &ato the server!'
+  player-join: '%player% &ehas joined &7%server%&e!' # replace %player% with %playernoformat% if you hate color
+  player-quit: '%player% &ehas left &7%server%&e!'
       
 # permissions are like, mcnsachat3.ext.admin or such
 # permissions to add: ignorelocked, ignoremute
