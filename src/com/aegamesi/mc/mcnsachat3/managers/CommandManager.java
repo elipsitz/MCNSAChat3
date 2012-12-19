@@ -1,0 +1,137 @@
+package com.aegamesi.mc.mcnsachat3.managers;
+
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+
+import org.bukkit.entity.Player;
+
+import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
+import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
+import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandInfo;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
+
+public class CommandManager {
+	public MCNSAChat3 plugin = null;
+	public HashMap<String, InternalCommand> commands = new HashMap<String, InternalCommand>();
+	public HashMap<String, String> aliases = new HashMap<String, String>();
+
+	public CommandManager(MCNSAChat3 plugin) {
+		this.plugin = plugin;
+
+		registerCommand(new CommandList(plugin));
+	}
+
+	public void registerCommand(Command command) {
+		Class<? extends Command> cls = command.getClass();
+		Annotation[] annotations = cls.getAnnotations();
+		for (int i = 0; i < annotations.length; i++) {
+			if (annotations[i] instanceof CommandInfo) {
+				CommandInfo ci = (CommandInfo) annotations[i];
+				commands.put(ci.alias(), new InternalCommand(ci.alias(), ci.permission(), ci.usage(), ci.description(), ci.visible(), command));
+				return;
+			}
+		}
+	}
+
+	public Boolean handleCommand(Player player, String command) {
+		command = command.substring(1);
+		String[] tokens = command.split("\\s");
+		if (tokens.length < 1)
+			return false;
+		tokens[0] = tokens[0].toLowerCase();
+
+		if (aliases.containsKey(tokens[0])) {
+			String args = new String("");
+			if (command.length() > 1 + tokens[0].length())
+				args = command.substring(1 + tokens[0].length());
+			handleAlias(player, tokens[0], args);
+			return true;
+		}
+		if (!commands.containsKey(tokens[0]))
+			return false;
+		if (!commands.get(tokens[0]).permissions.equals("") && !player.hasPermission("mcnsachat3.command." + commands.get(tokens[0]).permissions)) {
+			plugin.getLogger().info(player.getName() + " attempted to use command: " + tokens[0] + " without permission!");
+			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
+			return true;
+		}
+
+		String sArgs = new String("");
+		if (command.length() > (1 + tokens[0].length()))
+			sArgs = command.substring(1 + tokens[0].length());
+		if (commands.get(tokens[0]).command.handle(player, sArgs))
+			return true;
+
+		PluginUtil.send(player.getName(), "&cInvalid usage! &aCorrect usage: &6/" + commands.get(tokens[0]).alias + " &e" + commands.get(tokens[0]).usage + " &7(" + commands.get(tokens[0]).description + ")");
+		return true;
+	}
+
+	private void handleAlias(Player player, String alias, String message) {
+		// handle channel aliases
+		/*
+		 * if (plugin.channelManager.isLocked(player)) {
+		 * ColourHandler.sendMessage(player,
+		 * "&cYou have been locked in your channel and cannot change channels!"
+		 * ); return; }
+		 */
+
+		String channel = aliases.get(alias);
+		String perm = ChannelManager.getChannel(channel).read_permission;
+		if (!perm.equals("") && !player.hasPermission("mcnsachat3.read." + perm)) {
+			plugin.getLogger().info(player.getName() + " attempted to read channel " + channel + " without permission!");
+			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
+			return;
+		}
+
+		if (!message.trim().equals("")) {
+			// send a message rather than changing
+			plugin.chat.chat(PlayerManager.getPlayer(player.getName(), plugin.name), message, channel);
+			return;
+		}
+
+		// TODO change channel
+	}
+
+	public InternalCommand[] listCommands() {
+		int numInvisible = 0;
+		for (String cmd : commands.keySet())
+			if (!commands.get(cmd).visible)
+				numInvisible++;
+		InternalCommand[] list = new InternalCommand[commands.size() - numInvisible];
+		int i = 0;
+		for (String cmd : commands.keySet()) {
+			if (commands.get(cmd).visible) {
+				list[i] = commands.get(cmd);
+				i += 1;
+			}
+		}
+		Arrays.sort(list, new CommandComp());
+		return list;
+	}
+
+	public class InternalCommand {
+		public String alias = new String("");
+		public String permissions = new String("");
+		public String usage = new String("");
+		public String description = new String("");
+		public Boolean visible = new Boolean(true);
+		public Command command = null;
+
+		public InternalCommand(String _alias, String _perms, String _usage, String _desc, boolean _visible, Command _command) {
+			alias = _alias;
+			permissions = _perms;
+			usage = _usage;
+			description = _desc;
+			visible = _visible;
+			command = _command;
+		}
+	}
+
+	class CommandComp implements Comparator<InternalCommand> {
+		public int compare(InternalCommand a, InternalCommand b) {
+			return a.alias.compareTo(b.alias);
+		}
+	}
+}

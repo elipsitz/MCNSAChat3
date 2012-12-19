@@ -19,6 +19,8 @@ import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel.Mode;
 import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
+import com.aegamesi.mc.mcnsachat3.managers.CommandManager;
+import com.aegamesi.mc.mcnsachat3.managers.PlayerListener;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 
 public final class MCNSAChat3 extends JavaPlugin implements Listener {
@@ -26,6 +28,7 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	public String name;
 
 	public ChatManager chat;
+	public CommandManager command;
 	public PlayerListener pHandler;
 	public static Persistence persist;
 	public static PermissionManager permissions;
@@ -35,14 +38,17 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 		persist.saveDefault();
 		saveDefaultConfig();
 
+		// whew all the handlers and managers...mostly
 		name = getConfig().getString("name");
 		pHandler = new PlayerListener(this);
 		chat = new ChatManager(this);
+		command = new CommandManager(this);
 		PlayerManager.init();
 		ChannelManager.init();
 		PluginUtil.plugin = this;
 		permissions = PermissionsEx.getPermissionManager();
 
+		// persistence
 		loadPlayers();
 		loadChannels();
 		
@@ -101,12 +107,14 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	}
 
 	public void onDisable() {
-		persist.get().set("channels", null);
+		// save players
 		for (ChatPlayer p : PlayerManager.players) {
 			String pre = "players." + p.name + ".";
 			persist.get().set(pre + "channel", p.channel);
 			persist.get().set(pre + "listening", p.listening);
 		}
+		// save channels (soft list, will be updated by core on next sync)
+		persist.get().set("channels", null);
 		ArrayList<HashMap<String, Object>> chanMap = new ArrayList<HashMap<String, Object>>();
 		for (ChatChannel c : ChannelManager.channels) {
 			HashMap<String, Object> chan = new HashMap<String, Object>();

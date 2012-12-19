@@ -51,7 +51,7 @@ public class Server {
 			System.out.println("Unknown command");
 		}
 
-		System.out.println("Stopping...");
+		System.out.println("Server is shutting down NOW!");
 		System.out.println("WARNING: Threads may take longer to close");
 		serverSock.close();
 		for (ServerThread thread : threads) {
