@@ -19,7 +19,7 @@ public class PluginUtil {
 	}
 
 	public static String formatUser(String user) {
-		return color(MCNSAChat3.permissions.getUser(user).getPrefix() + user);
+		return MCNSAChat3.permissions.getUser(user).getPrefix() + user;
 	}
 	
 	public static String formatRank(String user) {

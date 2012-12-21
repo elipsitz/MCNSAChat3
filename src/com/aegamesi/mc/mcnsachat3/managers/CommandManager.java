@@ -7,11 +7,15 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 
+import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
+import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandInfo;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
 
 public class CommandManager {
 	public MCNSAChat3 plugin = null;
@@ -22,6 +26,7 @@ public class CommandManager {
 		this.plugin = plugin;
 
 		registerCommand(new CommandList(plugin));
+		registerCommand(new CommandRanks(plugin));
 	}
 
 	public void registerCommand(Command command) {
@@ -87,7 +92,10 @@ public class CommandManager {
 
 		if (!message.trim().equals("")) {
 			// send a message rather than changing
-			plugin.chat.chat(PlayerManager.getPlayer(player.getName(), plugin.name), message, channel);
+			ChatPlayer cp = PlayerManager.getPlayer(player.getName(), plugin.name);
+			plugin.chat.chat(cp, message, channel);
+			if (plugin.thread != null && !ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.LOCAL))
+				plugin.thread.write(new PlayerChatPacket(cp, message, channel));
 			return;
 		}
 

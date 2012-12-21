@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
@@ -41,6 +42,7 @@ public class PlayerListener implements Listener {
 		evt.setJoinMessage("");
 
 		ChatPlayer p = new ChatPlayer(evt.getPlayer().getName(), plugin.name);
+		p.formatted = PluginUtil.formatUser(p.name);
 		boolean welcomeThem = false;
 		// load data for the player, if it exists
 		ConfigurationSection playerData = MCNSAChat3.persist.get().getConfigurationSection("players");
@@ -60,8 +62,8 @@ public class PlayerListener implements Listener {
 			plugin.thread.write(new PlayerJoinedPacket(p));
 		// tell *everybody!*
 		String joinString = plugin.getConfig().getString("strings.player-join");
-		joinString = joinString.replaceAll("%player%", PluginUtil.formatUser(evt.getPlayer().getName()));
-		joinString = joinString.replaceAll("%playernoformat%", evt.getPlayer().getName());
+		joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(evt.getPlayer()).getPrefix());
+		joinString = joinString.replaceAll("%player%", evt.getPlayer().getName());
 		joinString = joinString.replaceAll("%server%", plugin.name);
 		PluginUtil.send(joinString);
 		if (welcomeThem) {
@@ -96,8 +98,8 @@ public class PlayerListener implements Listener {
 			plugin.thread.write(new PlayerLeftPacket(p));
 		// tell *everybody!*
 		String quitString = plugin.getConfig().getString("strings.player-quit");
-		quitString = quitString.replaceAll("%player%", PluginUtil.formatUser(evt.getPlayer().getName()));
-		quitString = quitString.replaceAll("%playernoformat%", evt.getPlayer().getName());
+		quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(evt.getPlayer()).getPrefix());
+		quitString = quitString.replaceAll("%player%", evt.getPlayer().getName());
 		quitString = quitString.replaceAll("%server%", plugin.name);
 		PluginUtil.send(quitString);
 	}
@@ -112,7 +114,7 @@ public class PlayerListener implements Listener {
 		// to chat?
 		plugin.chat.chat(player, evt.getMessage(), null);
 		// tell *everybody!*
-		if (plugin.thread != null)
+		if (plugin.thread != null && !ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.LOCAL))
 			plugin.thread.write(new PlayerChatPacket(player, evt.getMessage(), null));
 	}
 

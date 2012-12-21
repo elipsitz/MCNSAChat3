@@ -9,6 +9,7 @@ public class ChatPlayer {
 	public String name;
 	public String server;
 	public String channel;
+	public String formatted;
 	public ArrayList<String> listening;
 	
 	public ChatPlayer(String name, String server) {
@@ -22,10 +23,12 @@ public class ChatPlayer {
 		this.server = server;
 		this.channel = channel;
 		this.listening = (ArrayList<String>) listening.clone();
+		this.formatted = name;
 	}
 	
 	public void write(DataOutputStream out) throws IOException {
 		out.writeUTF(name);
+		out.writeUTF(formatted);
 		out.writeUTF(server);
 		out.writeUTF(channel);
 		out.writeInt(listening.size());
@@ -35,6 +38,7 @@ public class ChatPlayer {
 	
 	public static ChatPlayer read(DataInputStream in) throws IOException {
 		String name = in.readUTF();
+		String formatted = in.readUTF();
 		String server = in.readUTF();
 		String channel = in.readUTF();
 		ArrayList<String> listening = new ArrayList<String>();
@@ -42,7 +46,9 @@ public class ChatPlayer {
 		for(int i = 0; i < size; i++)
 			listening.add(in.readUTF());
 		
-		return new ChatPlayer(name, server, channel, listening);
+		ChatPlayer p = new ChatPlayer(name, server, channel, listening);
+		p.formatted = formatted;
+		return p;
 	}
 	
 	public boolean equals(Object o) {
