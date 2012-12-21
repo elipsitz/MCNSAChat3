@@ -43,7 +43,7 @@ public class ChatManager {
 			line = PluginUtil.stripColor(line);
 		String message = plugin.getConfig().getString("strings.action");
 		message = message.replace("%server%", player.server);
-		message = message.replace("%channel%", "&" + ChannelManager.getChannel(channel).color + channel);
+		message = message.replace("%channel%", ChannelManager.getChannel(channel).color + channel);
 		message = message.replace("%rank%", PluginUtil.formatRank(player.name));
 		message = message.replace("%prefix%", MCNSAChat3.permissions.getUser(player.name).getPrefix());
 		message = message.replace("%player%", player.name);

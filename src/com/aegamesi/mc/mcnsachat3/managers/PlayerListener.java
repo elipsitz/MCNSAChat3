@@ -115,7 +115,7 @@ public class PlayerListener implements Listener {
 		plugin.chat.chat(player, evt.getMessage(), null);
 		// tell *everybody!*
 		if (plugin.thread != null && !ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.LOCAL))
-			plugin.thread.write(new PlayerChatPacket(player, evt.getMessage(), null));
+			plugin.thread.write(new PlayerChatPacket(player, evt.getMessage(), null, PlayerChatPacket.Type.CHAT));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

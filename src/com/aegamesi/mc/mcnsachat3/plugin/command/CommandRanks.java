@@ -10,7 +10,7 @@ import ru.tehkode.permissions.PermissionGroup;
 import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 
-@CommandInfo(alias = "ranks", permission = "", description = "lists all of the server ranks")
+@Command.CommandInfo(alias = "ranks", permission = "", description = "lists all of the server ranks")
 public class CommandRanks implements Command {
 	public static MCNSAChat3 plugin = null;
 

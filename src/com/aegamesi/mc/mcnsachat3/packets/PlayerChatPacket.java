@@ -12,29 +12,39 @@ public class PlayerChatPacket implements IPacket {
 	public ChatPlayer player = null;
 	public String message;
 	public String channel;
+	public Type type;
 
 	public PlayerChatPacket() {
 	}
 
-	public PlayerChatPacket(ChatPlayer player, String message, String channel) {
+	public PlayerChatPacket(ChatPlayer player, String message, String channel, Type type) {
 		this.player = player;
-		if(channel == null || channel.length() <= 0)
+		if (channel == null || channel.length() <= 0)
 			channel = player.channel;
 		this.channel = channel;
 		this.message = message;
+		this.type = type;
 	}
 
 	public void write(DataOutputStream out) throws IOException {
 		out.writeShort(id);
-		player.write(out);
+		out.writeUTF(type.name());
+		if (type != Type.MISC)
+			player.write(out);
 		out.writeUTF(message);
 		out.writeUTF(channel);
 		out.flush();
 	}
 
 	public void read(DataInputStream in) throws IOException {
-		player = ChatPlayer.read(in);
+		type = Type.valueOf(in.readUTF());
+		if (type != Type.MISC)
+			player = ChatPlayer.read(in);
 		message = in.readUTF();
 		channel = in.readUTF();
+	}
+
+	public enum Type {
+		CHAT, ACTION, MISC;
 	}
 }

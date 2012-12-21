@@ -13,8 +13,8 @@ import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
-import com.aegamesi.mc.mcnsachat3.plugin.command.CommandInfo;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMe;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
 
 public class CommandManager {
@@ -27,14 +27,15 @@ public class CommandManager {
 
 		registerCommand(new CommandList(plugin));
 		registerCommand(new CommandRanks(plugin));
+		registerCommand(new CommandMe(plugin));
 	}
 
 	public void registerCommand(Command command) {
 		Class<? extends Command> cls = command.getClass();
 		Annotation[] annotations = cls.getAnnotations();
 		for (int i = 0; i < annotations.length; i++) {
-			if (annotations[i] instanceof CommandInfo) {
-				CommandInfo ci = (CommandInfo) annotations[i];
+			if (annotations[i] instanceof Command.CommandInfo) {
+				Command.CommandInfo ci = (Command.CommandInfo) annotations[i];
 				commands.put(ci.alias(), new InternalCommand(ci.alias(), ci.permission(), ci.usage(), ci.description(), ci.visible(), command));
 				return;
 			}
@@ -95,7 +96,7 @@ public class CommandManager {
 			ChatPlayer cp = PlayerManager.getPlayer(player.getName(), plugin.name);
 			plugin.chat.chat(cp, message, channel);
 			if (plugin.thread != null && !ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.LOCAL))
-				plugin.thread.write(new PlayerChatPacket(cp, message, channel));
+				plugin.thread.write(new PlayerChatPacket(cp, message, channel, PlayerChatPacket.Type.CHAT));
 			return;
 		}
 

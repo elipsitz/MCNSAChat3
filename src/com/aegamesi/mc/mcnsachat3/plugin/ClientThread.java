@@ -176,7 +176,7 @@ public class ClientThread extends Thread {
 					if (p.server.equals(plugin.name))
 						PluginUtil.sendLater(p.name, quitString);
 			}
-			
+
 			PlayerManager.removePlayer(packet.player);
 			return true;
 		}
@@ -211,7 +211,12 @@ public class ClientThread extends Thread {
 			if (packet.player.server.equals(plugin.name))
 				return true;
 
-			plugin.chat.chat(packet.player, packet.message, packet.channel);
+			if (packet.type == PlayerChatPacket.Type.CHAT)
+				plugin.chat.chat(packet.player, packet.message, packet.channel);
+			if (packet.type == PlayerChatPacket.Type.ACTION)
+				plugin.chat.action(packet.player, packet.message, packet.channel);
+			if (packet.type == PlayerChatPacket.Type.MISC)
+				plugin.chat.info(null, packet.message, packet.channel, true);
 			return true;
 		}
 		return false;
