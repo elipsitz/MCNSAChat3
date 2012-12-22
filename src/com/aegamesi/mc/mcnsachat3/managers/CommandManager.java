@@ -13,6 +13,7 @@ import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandChannel;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMe;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
@@ -32,6 +33,7 @@ public class CommandManager {
 		registerCommand(new CommandMe(plugin));
 		registerCommand(new CommandSeeAll(plugin));
 		registerCommand(new CommandSilence(plugin));
+		registerCommand(new CommandChannel(plugin));
 	}
 
 	public void registerCommand(Command command) {

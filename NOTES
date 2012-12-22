@@ -3,5 +3,6 @@ permissions:
 mcnsachat3.user.cancolor
 mcnsachat3.command.seeall
 mcnsachat3.command.silence
+mcnsachat3.command.channel
 mcnsachat3.read.*
 mcnsachat3.write.*
