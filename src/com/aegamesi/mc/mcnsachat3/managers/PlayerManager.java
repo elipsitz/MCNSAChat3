@@ -47,7 +47,15 @@ public class PlayerManager {
 	public static ArrayList<ChatPlayer> getPlayersListeningToChannel(String channel) {
 		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
 		for (ChatPlayer play : players)
-			if (play.listening.contains(channel))
+			if (play.listening.contains(channel) || play.modes.contains(ChatPlayer.Mode.SEEALL))
+				plays.add(play);
+		return plays;
+	}
+	
+	public static ArrayList<ChatPlayer> getPlayersInChannel(String channel) {
+		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
+		for (ChatPlayer play : players)
+			if (play.channel.equals(channel))
 				plays.add(play);
 		return plays;
 	}

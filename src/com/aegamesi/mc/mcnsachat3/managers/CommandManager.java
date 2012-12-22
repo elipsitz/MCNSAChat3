@@ -75,17 +75,15 @@ public class CommandManager {
 	}
 
 	private void handleAlias(Player player, String alias, String message) {
-		// handle channel aliases
-		/*
-		 * if (plugin.channelManager.isLocked(player)) {
-		 * ColourHandler.sendMessage(player,
-		 * "&cYou have been locked in your channel and cannot change channels!"
-		 * ); return; }
-		 */
+		ChatPlayer cp = PlayerManager.getPlayer(player.getName(), plugin.name);
+		if(cp.modes.contains(ChatPlayer.Mode.LOCKED)) {
+			PluginUtil.send(cp.name, "You have been locked in your channel and may not change channels.");
+			return;
+		}
 
 		String channel = aliases.get(alias);
-		String perm = ChannelManager.getChannel(channel).read_permission;
-		if (!perm.equals("") && !player.hasPermission("mcnsachat3.read." + perm)) {
+		String read_perm = ChannelManager.getChannel(channel).read_permission;
+		if (!read_perm.equals("") && !player.hasPermission("mcnsachat3.read." + read_perm)) {
 			plugin.getLogger().info(player.getName() + " attempted to read channel " + channel + " without permission!");
 			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 			return;
@@ -93,14 +91,23 @@ public class CommandManager {
 
 		if (!message.trim().equals("")) {
 			// send a message rather than changing
-			ChatPlayer cp = PlayerManager.getPlayer(player.getName(), plugin.name);
+			String write_perm = ChannelManager.getChannel(channel).read_permission;
+			if (!write_perm.equals("") && !player.hasPermission("mcnsachat3.write." + write_perm)) {
+				plugin.getLogger().info(player.getName() + " attempted to write to channel " + channel + " without permission!");
+				PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
+				return;
+			}
+			if(cp.modes.contains(ChatPlayer.Mode.MUTE)) {
+				PluginUtil.send(cp.name, "You are not allowed to speak right now.");
+				return;
+			}
 			plugin.chat.chat(cp, message, channel);
-			if (plugin.thread != null && !ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.LOCAL))
-				plugin.thread.write(new PlayerChatPacket(cp, message, channel, PlayerChatPacket.Type.CHAT));
+			if (MCNSAChat3.thread != null && !ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.LOCAL))
+				MCNSAChat3.thread.write(new PlayerChatPacket(cp, message, channel, PlayerChatPacket.Type.CHAT));
 			return;
 		}
 
-		// TODO change channel
+		cp.changeChannels(channel);
 	}
 
 	public InternalCommand[] listCommands() {

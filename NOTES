@@ -1,0 +1,6 @@
+permissions:
+
+mcnsachat3.user.cancolor
+mcnsachat3.command.seeall
+mcnsachat3.read.*
+mcnsachat3.write.*

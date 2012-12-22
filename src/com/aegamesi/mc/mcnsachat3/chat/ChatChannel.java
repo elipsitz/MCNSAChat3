@@ -12,7 +12,6 @@ public class ChatChannel {
 	public ArrayList<Mode> modes;
 	public String alias;
 	public String color;
-	public String owner;
 	
 	public ChatChannel(String name) {
 		this.name = name;
@@ -21,7 +20,6 @@ public class ChatChannel {
 		this.write_permission = "";
 		this.alias = "";
 		this.color = "";
-		this.owner = "";
 	}
 
 	public enum Mode {
@@ -34,7 +32,6 @@ public class ChatChannel {
 		out.writeUTF(write_permission);
 		out.writeUTF(alias);
 		out.writeUTF(color);
-		out.writeUTF(owner);
 		out.writeInt(modes.size());
 		for(Mode mode : modes)
 			out.writeUTF(mode.name());
@@ -46,7 +43,6 @@ public class ChatChannel {
 		String write_permission = in.readUTF();
 		String alias = in.readUTF();
 		String color = in.readUTF();
-		String owner = in.readUTF();
 		ArrayList<Mode> modes = new ArrayList<Mode>();
 		int size = in.readInt();
 		for(int i = 0; i < size; i++)
@@ -58,7 +54,6 @@ public class ChatChannel {
 		chan.write_permission = write_permission;
 		chan.alias = alias;
 		chan.color = color;
-		chan.owner = owner;
 		return chan;
 	}
 }

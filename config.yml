@@ -7,10 +7,3 @@ strings:
   player-quit: '%prefix%%player% &ehas left &7%server%&e!'
   message: '{&7%server%&f} <%channel%&f> [%rank%&f] %player%: &7%message%'
   action: '{&7%server%&f} <%channel%&f> * %prefix%%player% &f%message%'
-      
-# permissions are like, mcnsachat3.ext.admin or such
-# permissions to add: ignorelocked, ignoremute
-# also, store chat persist (channels and their modes, players and their channels and modes... in a yml file)
-# server only stores channels, client only stores players
-
-# permissions so far: mcnsachat3.user.cancolor

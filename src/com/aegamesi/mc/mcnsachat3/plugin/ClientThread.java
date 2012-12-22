@@ -45,11 +45,11 @@ public class ClientThread extends Thread {
 			in = new DataInputStream(socket.getInputStream());
 		} catch (UnknownHostException e) {
 			log.warning("Chat server: Unknown host");
-			plugin.thread = null;
+			MCNSAChat3.thread = null;
 			return;
 		} catch (IOException e) {
 			log.warning("Couldn't connect to chat server");
-			plugin.thread = null;
+			MCNSAChat3.thread = null;
 			return;
 		}
 
@@ -74,7 +74,7 @@ public class ClientThread extends Thread {
 			}
 			log.warning("Players lost: " + msg);
 
-			plugin.thread = null;
+			MCNSAChat3.thread = null;
 			return;
 		} finally {
 			try {
@@ -88,7 +88,7 @@ public class ClientThread extends Thread {
 				log.warning("Error closing socket");
 			}
 		}
-		plugin.thread = null;
+		MCNSAChat3.thread = null;
 	}
 
 	public boolean loop(DataInputStream in, DataOutputStream out) throws IOException {

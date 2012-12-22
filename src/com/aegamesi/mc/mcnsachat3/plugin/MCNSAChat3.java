@@ -16,15 +16,15 @@ import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
-import com.aegamesi.mc.mcnsachat3.chat.ChatChannel.Mode;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
+import com.aegamesi.mc.mcnsachat3.managers.ChatManager;
 import com.aegamesi.mc.mcnsachat3.managers.CommandManager;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerListener;
 import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 
 public final class MCNSAChat3 extends JavaPlugin implements Listener {
-	public ClientThread thread = null;
+	public static ClientThread thread = null;
 	public String name;
 
 	public ChatManager chat;
@@ -86,6 +86,9 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 			if (section != null) {
 				p.channel = section.getString("channel");
 				p.listening.addAll((List<String>) section.get("listening"));
+				List<String> modes = (List<String>) section.get("modes");
+				for (String mode : modes)
+					p.modes.add(ChatPlayer.Mode.valueOf(mode));
 			}
 		}
 	}
@@ -99,10 +102,9 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 			c.write_permission = (String) (channel.containsKey("write_permission") ? channel.get("write_permission") : "");
 			c.alias = (String) (channel.containsKey("alias") ? channel.get("alias") : "");
 			c.color = (String) (channel.containsKey("color") ? channel.get("color") : "");
-			c.owner = (String) (channel.containsKey("owner") ? channel.get("owner") : "");
 			List<String> modes = (List<String>) channel.get("modes");
 			for (String mode : modes)
-				c.modes.add(Mode.valueOf(mode));
+				c.modes.add(ChatChannel.Mode.valueOf(mode));
 			if(c.alias.length() > 0)
 				command.aliases.put(c.alias, c.name);
 			ChannelManager.channels.add(c);
@@ -111,10 +113,14 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 
 	public void onDisable() {
 		// save players
-		for (ChatPlayer p : PlayerManager.players) {
+		for (ChatPlayer p : PlayerManager.getPlayersByServer(name)) {
 			String pre = "players." + p.name + ".";
 			persist.get().set(pre + "channel", p.channel);
 			persist.get().set(pre + "listening", p.listening);
+			ArrayList<String> modes = new ArrayList<String>();
+			for(ChatPlayer.Mode mode : p.modes)
+				modes.add(mode.name());
+			persist.get().set(pre + "modes", modes);
 		}
 		// save channels (soft list, will be updated by core on next sync)
 		persist.get().set("channels", null);
@@ -126,7 +132,6 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 			chan.put("write_permission", c.write_permission);
 			chan.put("alias", c.alias);
 			chan.put("color", c.color);
-			chan.put("owner", c.owner);
 			ArrayList<String> modes = new ArrayList<String>();
 			for(ChatChannel.Mode mode : c.modes)
 				modes.add(mode.name());

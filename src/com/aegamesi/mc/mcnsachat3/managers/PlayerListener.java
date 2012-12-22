@@ -58,8 +58,8 @@ public class PlayerListener implements Listener {
 		}
 
 		PlayerManager.players.add(p);
-		if (plugin.thread != null)
-			plugin.thread.write(new PlayerJoinedPacket(p));
+		if (MCNSAChat3.thread != null)
+			MCNSAChat3.thread.write(new PlayerJoinedPacket(p));
 		// tell *everybody!*
 		String joinString = plugin.getConfig().getString("strings.player-join");
 		joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(evt.getPlayer()).getPrefix());
@@ -94,8 +94,8 @@ public class PlayerListener implements Listener {
 		MCNSAChat3.persist.get().set(pre + "channel", p.channel);
 		MCNSAChat3.persist.get().set(pre + "listening", p.listening);
 		// network
-		if (plugin.thread != null)
-			plugin.thread.write(new PlayerLeftPacket(p));
+		if (MCNSAChat3.thread != null)
+			MCNSAChat3.thread.write(new PlayerLeftPacket(p));
 		// tell *everybody!*
 		String quitString = plugin.getConfig().getString("strings.player-quit");
 		quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(evt.getPlayer()).getPrefix());
@@ -112,10 +112,14 @@ public class PlayerListener implements Listener {
 		ChatPlayer player = PlayerManager.getPlayer(evt.getPlayer().getName(), plugin.name);
 		// XXX blah blah check some stuff, like timeout maybe? are they allowed
 		// to chat?
+		if(player.modes.contains(ChatPlayer.Mode.MUTE)) {
+			PluginUtil.send(player.name, "You are not allowed to speak right now.");
+			return;
+		}
 		plugin.chat.chat(player, evt.getMessage(), null);
 		// tell *everybody!*
-		if (plugin.thread != null && !ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.LOCAL))
-			plugin.thread.write(new PlayerChatPacket(player, evt.getMessage(), null, PlayerChatPacket.Type.CHAT));
+		if (MCNSAChat3.thread != null && !ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.LOCAL))
+			MCNSAChat3.thread.write(new PlayerChatPacket(player, evt.getMessage(), null, PlayerChatPacket.Type.CHAT));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

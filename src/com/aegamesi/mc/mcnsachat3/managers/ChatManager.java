@@ -1,4 +1,4 @@
-package com.aegamesi.mc.mcnsachat3.plugin;
+package com.aegamesi.mc.mcnsachat3.managers;
 
 import java.util.ArrayList;
 
@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
-import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
-import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
+import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
+import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 
 public class ChatManager {
 	public MCNSAChat3 plugin;
