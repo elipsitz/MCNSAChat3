@@ -18,7 +18,7 @@ public class ChatManager {
 
 	public void chat(ChatPlayer player, String line, String channel) {
 		if (channel == null || channel.length() <= 0)
-			channel = PlayerManager.getPlayer(player).channel;
+			channel = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel).name;
 		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
 			line = PluginUtil.color(line);
 		else
@@ -36,7 +36,7 @@ public class ChatManager {
 	
 	public void action(ChatPlayer player, String line, String channel) {
 		if (channel == null || channel.length() <= 0)
-			channel = PlayerManager.getPlayer(player).channel;
+			channel = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel).name;
 		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
 			line = PluginUtil.color(line);
 		else
@@ -58,6 +58,7 @@ public class ChatManager {
 			return;
 		ArrayList<ChatPlayer> players = PlayerManager.getPlayersListeningToChannel(chan.name);
 		for (ChatPlayer p : players) {
+			System.out.println(p.name);
 			boolean send = player == null;
 			if (!send) {
 				if (net)

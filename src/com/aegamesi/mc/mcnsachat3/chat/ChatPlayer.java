@@ -79,13 +79,13 @@ public class ChatPlayer {
 	}
 
 	public void changeChannels(String newChannel) {
-		if (listening.contains(channel))
-			listening.remove(channel);
-		channel = newChannel;
-		listening.add(channel);
+		if (listening.contains(channel.toLowerCase()))
+			listening.remove(channel.toLowerCase());
+		channel = newChannel.toLowerCase();
+		listening.add(channel.toLowerCase());
 
 		// create it if it doesn't exist
-		ChatChannel chan = ChannelManager.getChannel(channel);
+		ChatChannel chan = ChannelManager.getChannel(channel.toLowerCase());
 		if (chan == null) {
 			chan = new ChatChannel(channel);
 			ChannelManager.channels.add(chan);

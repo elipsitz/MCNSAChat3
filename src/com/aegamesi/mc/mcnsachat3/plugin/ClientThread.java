@@ -146,8 +146,8 @@ public class ClientThread extends Thread {
 			log.info("Player joined " + packet.player.name + " from " + packet.player.server);
 			if (!ChannelManager.getChannel(packet.player.channel).modes.contains(ChatChannel.Mode.LOCAL)) {
 				String joinString = plugin.getConfig().getString("strings.player-join");
-				joinString = joinString.replaceAll("%player%", PluginUtil.formatUser(packet.player.name));
-				joinString = joinString.replaceAll("%playernoformat%", packet.player.name);
+				joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
+				joinString = joinString.replaceAll("%player%", packet.player.name);
 				joinString = joinString.replaceAll("%server%", plugin.name);
 				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
 				for (ChatPlayer p : toNotify)
@@ -168,8 +168,8 @@ public class ClientThread extends Thread {
 			log.info("Player left" + packet.player.name + " from " + packet.player.server);
 			if (!ChannelManager.getChannel(packet.player.channel).modes.contains(ChatChannel.Mode.LOCAL)) {
 				String quitString = plugin.getConfig().getString("strings.player-quit");
-				quitString = quitString.replaceAll("%player%", PluginUtil.formatUser(packet.player.name));
-				quitString = quitString.replaceAll("%playernoformat%", packet.player.name);
+				quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
+				quitString = quitString.replaceAll("%player%", packet.player.name);
 				quitString = quitString.replaceAll("%server%", plugin.name);
 				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
 				for (ChatPlayer p : toNotify)

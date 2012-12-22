@@ -1,6 +1,6 @@
 name: default
-default-channel: G
-default-listen: [G, LOCAL_ANNOUNCE, NET_ANNOUNCE]
+default-channel: g
+default-listen: [g, local_announce, net_announce]
 strings:
   player-welcome: '&aWelcome &e%player% &ato the server!'
   player-join: '%prefix%%player% &ehas joined &7%server%&e!'
