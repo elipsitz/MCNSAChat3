@@ -17,38 +17,48 @@ public class ChatManager {
 	}
 
 	public void chat(ChatPlayer player, String line, String channel) {
+		ChatChannel chan = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel);
 		if (channel == null || channel.length() <= 0)
-			channel = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel).name;
+			channel = chan.name;
 		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
 			line = PluginUtil.color(line);
 		else
 			line = PluginUtil.stripColor(line);
+
+		if (chan.modes.contains(ChatChannel.Mode.RAVE))
+			line = PluginUtil.raveColor(line);
+
 		String message = plugin.getConfig().getString("strings.message");
 		message = message.replace("%server%", player.server);
-		message = message.replace("%channel%", ChannelManager.getChannel(channel).color + channel);
+		message = message.replace("%channel%", chan.color + channel);
 		message = message.replace("%rank%", PluginUtil.formatRank(player.name));
 		message = message.replace("%prefix%", MCNSAChat3.permissions.getUser(player.name).getPrefix());
 		message = message.replace("%player%", player.name);
 		message = message.replace("%message%", line);
-		
+
 		info(player, message, channel, !(player.server.equals(plugin.name)));
 	}
-	
+
 	public void action(ChatPlayer player, String line, String channel) {
+		ChatChannel chan = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel);
 		if (channel == null || channel.length() <= 0)
-			channel = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel).name;
+			channel = chan.name;
 		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
 			line = PluginUtil.color(line);
 		else
 			line = PluginUtil.stripColor(line);
+
+		if (chan.modes.contains(ChatChannel.Mode.RAVE))
+			line = PluginUtil.raveColor(line);
+
 		String message = plugin.getConfig().getString("strings.action");
 		message = message.replace("%server%", player.server);
-		message = message.replace("%channel%", ChannelManager.getChannel(channel).color + channel);
+		message = message.replace("%channel%", chan.color + channel);
 		message = message.replace("%rank%", PluginUtil.formatRank(player.name));
 		message = message.replace("%prefix%", MCNSAChat3.permissions.getUser(player.name).getPrefix());
 		message = message.replace("%player%", player.name);
 		message = message.replace("%message%", line);
-		
+
 		info(player, message, channel, !(player.server.equals(plugin.name)));
 	}
 

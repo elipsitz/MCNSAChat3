@@ -24,7 +24,7 @@ public class CommandMe implements Command {
 		}
 		
 		ChatPlayer p = PlayerManager.getPlayer(player.getName(), plugin.name);
-		if(p.modes.contains(ChatPlayer.Mode.MUTE)) {
+		if(p.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(p.channel).modes.contains(ChatChannel.Mode.MUTE)) {
 			PluginUtil.send(p.name, "You are not allowed to speak right now.");
 			return true;
 		}

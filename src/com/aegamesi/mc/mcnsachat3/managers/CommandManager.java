@@ -14,13 +14,16 @@ import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandChannel;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandColor;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandHelp;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandListen;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandLock;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMe;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMode;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMove;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSearch;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSeeAll;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSilence;
 
@@ -31,7 +34,6 @@ public class CommandManager {
 
 	public CommandManager(MCNSAChat3 plugin) {
 		this.plugin = plugin;
-
 		registerCommand(new CommandList(plugin));
 		registerCommand(new CommandRanks(plugin));
 		registerCommand(new CommandMe(plugin));
@@ -42,6 +44,9 @@ public class CommandManager {
 		registerCommand(new CommandHelp(plugin));
 		registerCommand(new CommandMove(plugin));
 		registerCommand(new CommandLock(plugin));
+		registerCommand(new CommandMode(plugin));
+		registerCommand(new CommandColor(plugin));
+		registerCommand(new CommandSearch(plugin));
 	}
 
 	public void registerCommand(Command command) {
@@ -111,7 +116,7 @@ public class CommandManager {
 				PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 				return;
 			}
-			if(cp.modes.contains(ChatPlayer.Mode.MUTE)) {
+			if(cp.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(cp.channel).modes.contains(ChatChannel.Mode.MUTE)) {
 				PluginUtil.send(cp.name, "You are not allowed to speak right now.");
 				return;
 			}

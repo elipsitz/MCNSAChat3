@@ -6,5 +6,8 @@ mcnsachat3.command.silence
 mcnsachat3.command.channel
 mcnsachat3.command.listen
 mcnsachat3.command.move
+mcnsachat3.command.mode
+mcnsachat3.command.color
+mcnsachat3.command.search
 mcnsachat3.read.*
 mcnsachat3.write.*

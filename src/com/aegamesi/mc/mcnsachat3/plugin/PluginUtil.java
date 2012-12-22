@@ -3,6 +3,7 @@ package com.aegamesi.mc.mcnsachat3.plugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +15,16 @@ public class PluginUtil {
 	public static String color(String str) {
 		return ChatColor.translateAlternateColorCodes('&', str);
 	}
-	
+
+	public static String raveColor(String str) {
+		Random r = new Random();
+		String newStr = "";
+		String colors = "123456789abcde";
+		for (int i = 0; i < str.length(); i++)
+			newStr += "&" + colors.charAt(r.nextInt(colors.length())) + str.charAt(i);
+		return newStr;
+	}
+
 	public static String stripColor(String str) {
 		return ChatColor.stripColor(color(str));
 	}
@@ -22,7 +32,7 @@ public class PluginUtil {
 	public static String formatUser(String user) {
 		return MCNSAChat3.permissions.getUser(user).getPrefix() + user;
 	}
-	
+
 	public static String formatRank(String user) {
 		return color(MCNSAChat3.permissions.getUser(user).getPrefix() + MCNSAChat3.permissions.getUser(user).getSuffix());
 	}
@@ -53,11 +63,11 @@ public class PluginUtil {
 	public static String getPlayerList() {
 		Player[] list = Bukkit.getServer().getOnlinePlayers();
 		ArrayList<String> names = new ArrayList<String>();
-		for(Player player : list)
+		for (Player player : list)
 			names.add(player.getName());
 		return "&7Online (" + list.length + "/" + Bukkit.getServer().getMaxPlayers() + "): " + formatPlayerList(names.toArray(new String[0]));
 	}
-	
+
 	public static String formatPlayerList(String[] list) {
 		Arrays.sort(list, new Comparator<String>() {
 			public int compare(String a, String b) {

@@ -112,7 +112,7 @@ public class PlayerListener implements Listener {
 		ChatPlayer player = PlayerManager.getPlayer(evt.getPlayer().getName(), plugin.name);
 		// XXX blah blah check some stuff, like timeout maybe? are they allowed
 		// to chat?
-		if(player.modes.contains(ChatPlayer.Mode.MUTE)) {
+		if(player.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.MUTE)) {
 			PluginUtil.send(player.name, "You are not allowed to speak right now.");
 			return;
 		}
