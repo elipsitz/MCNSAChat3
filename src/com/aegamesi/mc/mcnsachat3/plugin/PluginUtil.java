@@ -55,7 +55,7 @@ public class PluginUtil {
 		ArrayList<String> names = new ArrayList<String>();
 		for(Player player : list)
 			names.add(player.getName());
-		return "&7Online (" + list.length + "/" + Bukkit.getServer().getMaxPlayers() + "): " + formatPlayerList((String[]) names.toArray());
+		return "&7Online (" + list.length + "/" + Bukkit.getServer().getMaxPlayers() + "): " + formatPlayerList(names.toArray(new String[0]));
 	}
 	
 	public static String formatPlayerList(String[] list) {
