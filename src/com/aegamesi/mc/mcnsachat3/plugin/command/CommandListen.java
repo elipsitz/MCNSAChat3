@@ -28,7 +28,7 @@ public class CommandListen implements Command {
 		ChatPlayer cp = PlayerManager.getPlayer(player.getName(), plugin.name);
 		ChatChannel chan = ChannelManager.getChannel(sArgs);
 		String read_perm = chan == null ? "" : chan.read_permission;
-		if (!read_perm.equals("") && !player.hasPermission("mcnsachat3.read." + read_perm)) {
+		if (!read_perm.equals("") && !MCNSAChat3.permissions.has(player, "mcnsachat3.read." + read_perm)) {
 			plugin.getLogger().info(player.getName() + " attempted to read channel " + sArgs + " without permission!");
 			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 			return true;

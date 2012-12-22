@@ -14,6 +14,7 @@ import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandChannel;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandHelp;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandListen;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMe;
@@ -36,6 +37,7 @@ public class CommandManager {
 		registerCommand(new CommandSilence(plugin));
 		registerCommand(new CommandChannel(plugin));
 		registerCommand(new CommandListen(plugin));
+		registerCommand(new CommandHelp(plugin));
 	}
 
 	public void registerCommand(Command command) {
@@ -66,7 +68,7 @@ public class CommandManager {
 		}
 		if (!commands.containsKey(tokens[0]))
 			return false;
-		if (!commands.get(tokens[0]).permissions.equals("") && !player.hasPermission("mcnsachat3.command." + commands.get(tokens[0]).permissions)) {
+		if (!commands.get(tokens[0]).permissions.equals("") && !MCNSAChat3.permissions.has(player,  "mcnsachat3.command." + commands.get(tokens[0]).permissions)) {
 			plugin.getLogger().info(player.getName() + " attempted to use command: " + tokens[0] + " without permission!");
 			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 			return true;
@@ -91,7 +93,7 @@ public class CommandManager {
 
 		String channel = aliases.get(alias);
 		String read_perm = ChannelManager.getChannel(channel).read_permission;
-		if (!read_perm.equals("") && !player.hasPermission("mcnsachat3.read." + read_perm)) {
+		if (!read_perm.equals("") && !MCNSAChat3.permissions.has(player, "mcnsachat3.read." + read_perm)) {
 			plugin.getLogger().info(player.getName() + " attempted to read channel " + channel + " without permission!");
 			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 			return;
@@ -100,7 +102,7 @@ public class CommandManager {
 		if (!message.trim().equals("")) {
 			// send a message rather than changing
 			String write_perm = ChannelManager.getChannel(channel).read_permission;
-			if (!write_perm.equals("") && !player.hasPermission("mcnsachat3.write." + write_perm)) {
+			if (!write_perm.equals("") && !MCNSAChat3.permissions.has(player, "mcnsachat3.write." + write_perm)) {
 				plugin.getLogger().info(player.getName() + " attempted to write to channel " + channel + " without permission!");
 				PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 				return;
