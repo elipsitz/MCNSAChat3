@@ -17,7 +17,9 @@ import com.aegamesi.mc.mcnsachat3.plugin.command.CommandChannel;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandHelp;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandListen;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandLock;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMe;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMove;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSeeAll;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSilence;
@@ -38,6 +40,8 @@ public class CommandManager {
 		registerCommand(new CommandChannel(plugin));
 		registerCommand(new CommandListen(plugin));
 		registerCommand(new CommandHelp(plugin));
+		registerCommand(new CommandMove(plugin));
+		registerCommand(new CommandLock(plugin));
 	}
 
 	public void registerCommand(Command command) {
