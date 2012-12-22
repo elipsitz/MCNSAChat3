@@ -32,7 +32,7 @@ public class CommandMe implements Command {
 		// to chat?
 		plugin.chat.action(p, sArgs, null);
 		// tell *everybody!*
-		if (MCNSAChat3.thread != null && !ChannelManager.getChannel(p.channel).modes.contains(ChatChannel.Mode.LOCAL))
+		if (MCNSAChat3.thread != null)
 			MCNSAChat3.thread.write(new PlayerChatPacket(p, sArgs, null, PlayerChatPacket.Type.ACTION));
 		
 		return true;

@@ -121,7 +121,7 @@ public class CommandManager {
 				return;
 			}
 			plugin.chat.chat(cp, message, channel);
-			if (MCNSAChat3.thread != null && !ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.LOCAL))
+			if (MCNSAChat3.thread != null)
 				MCNSAChat3.thread.write(new PlayerChatPacket(cp, message, channel, PlayerChatPacket.Type.CHAT));
 			return;
 		}

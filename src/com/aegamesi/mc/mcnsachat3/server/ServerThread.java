@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
@@ -76,7 +78,6 @@ public class ServerThread extends Thread {
 					duplicateRemover.addAll(channel.modes);
 					old.modes.clear();
 					old.modes.addAll(duplicateRemover);
-					// XXX in the future, merge other properties too
 				}
 			}
 			// okay, now send the updated list to everybody
@@ -121,7 +122,20 @@ public class ServerThread extends Thread {
 			PlayerChatPacket packet = new PlayerChatPacket();
 			packet.read(in);
 			Server.broadcast(packet);
-			// TODO log this chat
+			String channel = packet.channel == null ? packet.player.channel : packet.channel;
+			log("[" + channel + "] <" + packet.player.name + "> " + packet.message);
+
+			// now log, specifically in chat_log too
+			String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+			String line = String.format("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"", time, name, packet.player.name, channel, packet.message);
+			try {
+				Server.chat_log.write(line);
+				Server.chat_log.newLine();
+				Server.chat_log.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			return true;
 		}
 		return false;
@@ -163,6 +177,15 @@ public class ServerThread extends Thread {
 	}
 
 	public void log(Object o) {
-		System.out.println("#" + getId() + "[" + (name.length() == 0 ? host : name) + "] " + o.toString());
+		String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String line = "#" + getId() + "[" + (name.length() == 0 ? host : name) + "] " + time + " |" + o.toString();
+		System.out.println(line);
+		try {
+			Server.general_log.write(line);
+			Server.general_log.newLine();
+			Server.general_log.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

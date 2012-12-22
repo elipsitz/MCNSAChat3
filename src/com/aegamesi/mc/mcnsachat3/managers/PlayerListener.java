@@ -118,7 +118,7 @@ public class PlayerListener implements Listener {
 		}
 		plugin.chat.chat(player, evt.getMessage(), null);
 		// tell *everybody!*
-		if (MCNSAChat3.thread != null && !ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.LOCAL))
+		if (MCNSAChat3.thread != null)
 			MCNSAChat3.thread.write(new PlayerChatPacket(player, evt.getMessage(), null, PlayerChatPacket.Type.CHAT));
 	}
 

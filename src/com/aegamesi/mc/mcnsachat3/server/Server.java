@@ -1,5 +1,8 @@
 package com.aegamesi.mc.mcnsachat3.server;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -18,6 +21,9 @@ public class Server {
 	public static ArrayList<ServerThread> threads;
 	public static ServerSocket serverSock = null;
 	public static ServerPersistence persist;
+	
+	public static BufferedWriter general_log;
+	public static BufferedWriter chat_log;
 
 	public static void main(String[] args) throws IOException {
 		int port = 51325;
@@ -68,7 +74,19 @@ public class Server {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void load() {
+	public static void load() throws IOException {
+		// set up logging
+		general_log = new BufferedWriter(new FileWriter(new File("server_general_log.txt"), true));
+		boolean exists = new File("server_chat_log.csv").exists();
+		chat_log = new BufferedWriter(new FileWriter(new File("server_chat_log.csv"), true));
+		if (!exists) {
+			chat_log.write("time,server,player,channel,message");
+			chat_log.newLine();
+			chat_log.flush();
+		}
+		
+		
+		// load channels
 		List<Map<?, ?>> channelData = persist.get().getMapList("channels");
 		for (Map<?, ?> channel : channelData) {
 			ChatChannel c = new ChatChannel((String) channel.get("name"));
@@ -83,7 +101,12 @@ public class Server {
 		}
 	}
 
-	public static void save() {
+	public static void save() throws IOException {
+		//unload logging
+		general_log.close();
+		chat_log.close();
+		
+		// save channels
 		ArrayList<HashMap<String, Object>> chanMap = new ArrayList<HashMap<String, Object>>();
 		for (ChatChannel c : ChannelManager.channels) {
 			HashMap<String, Object> chan = new HashMap<String, Object>();

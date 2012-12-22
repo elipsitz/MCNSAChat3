@@ -210,6 +210,8 @@ public class ClientThread extends Thread {
 			packet.read(in);
 			if (packet.player.server.equals(plugin.name))
 				return true;
+			if(ChannelManager.getChannel(packet.channel == null ? packet.player.channel : packet.channel).modes.contains(ChatChannel.Mode.LOCAL))
+				return true;
 
 			if (packet.type == PlayerChatPacket.Type.CHAT)
 				plugin.chat.chat(packet.player, packet.message, packet.channel);
