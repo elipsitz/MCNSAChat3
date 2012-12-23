@@ -21,6 +21,7 @@ import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerLeftPacket;
+import com.aegamesi.mc.mcnsachat3.packets.VersionPacket;
 
 public class ClientThread extends Thread {
 	public Socket socket = null;
@@ -40,7 +41,7 @@ public class ClientThread extends Thread {
 	public void run() {
 		log.info("Attempting to connect to chat server...");
 		try {
-			socket = new Socket("127.0.0.1", 51325);
+			socket = new Socket(plugin.getConfig().getString("chat-server"), 51325);
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new DataInputStream(socket.getInputStream());
 		} catch (UnknownHostException e) {
@@ -57,6 +58,7 @@ public class ClientThread extends Thread {
 		log.info("Connected to chat server.");
 
 		try {
+			new VersionPacket(VersionPacket.CURRENT_VERSION).write(out);
 			new ServerJoinedPacket(plugin.name, PlayerManager.getPlayersByServer(plugin.name)).write(out);
 			new ChannelListingPacket(ChannelManager.channels).write(out);
 

@@ -22,6 +22,7 @@ import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerLeftPacket;
+import com.aegamesi.mc.mcnsachat3.packets.VersionPacket;
 
 public class ServerThread extends Thread {
 	public Socket socket = null;
@@ -46,6 +47,15 @@ public class ServerThread extends Thread {
 
 	public boolean loop(DataInputStream in, DataOutputStream out) throws IOException {
 		short type = in.readShort();
+		if (type == VersionPacket.id) {
+			VersionPacket packet = new VersionPacket();
+			packet.read(in);
+			if(packet.version == VersionPacket.CURRENT_VERSION) {
+				log("Closing connection due to invalid version. Our version: " + VersionPacket.CURRENT_VERSION +", Theirs: " + packet.version);
+				return false;
+			}
+			return true;
+		}
 		if (type == ServerJoinedPacket.id) {
 			ServerJoinedPacket packet = new ServerJoinedPacket();
 			packet.read(in);
