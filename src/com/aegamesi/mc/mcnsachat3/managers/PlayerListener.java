@@ -76,7 +76,7 @@ public class PlayerListener implements Listener {
 		}
 
 		// welcome them, send list of players, set colored name
-		String result = PluginUtil.formatUser(evt.getPlayer().getName());
+		String result = PluginUtil.color(PluginUtil.formatUser(evt.getPlayer().getName()));
 		if (result.length() > 16)
 			result = result.substring(0, 16);
 		evt.getPlayer().setPlayerListName(result);
@@ -112,6 +112,12 @@ public class PlayerListener implements Listener {
 		ChatPlayer player = PlayerManager.getPlayer(evt.getPlayer().getName(), plugin.name);
 		// XXX blah blah check some stuff, like timeout maybe? are they allowed
 		// to chat?
+		String write_perm = ChannelManager.getChannel(player.channel).write_permission;
+		if (!write_perm.equals("") && !MCNSAChat3.permissions.has(evt.getPlayer(), "mcnsachat3.write." + write_perm)) {
+			plugin.getLogger().info(player.name + " attempted to write to channel " + player.channel + " without permission!");
+			PluginUtil.send(player.name, "&cYou don't have permission to do that!");
+			return;
+		}
 		if(player.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(player.channel).modes.contains(ChatChannel.Mode.MUTE)) {
 			PluginUtil.send(player.name, "You are not allowed to speak right now.");
 			return;

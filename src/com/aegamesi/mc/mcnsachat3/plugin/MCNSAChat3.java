@@ -55,7 +55,7 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 		// set up colored ranks and stuff
 		Player[] players = getServer().getOnlinePlayers();
 		for(int i = 0; i < players.length; i++) {			
-			String result = PluginUtil.formatUser(players[i].getName());
+			String result = PluginUtil.color(PluginUtil.formatUser(players[i].getName()));
 			if(result.length() > 16)
 				result = result.substring(0, 16);
 			players[i].setPlayerListName(result);

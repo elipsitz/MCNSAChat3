@@ -24,6 +24,12 @@ public class CommandMe implements Command {
 		}
 		
 		ChatPlayer p = PlayerManager.getPlayer(player.getName(), plugin.name);
+		String write_perm = ChannelManager.getChannel(p.channel).write_permission;
+		if (!write_perm.equals("") && !MCNSAChat3.permissions.has(player, "mcnsachat3.write." + write_perm)) {
+			plugin.getLogger().info(player.getName() + " attempted to write to channel " + p.channel + " without permission!");
+			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
+			return true;
+		}
 		if(p.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(p.channel).modes.contains(ChatChannel.Mode.MUTE)) {
 			PluginUtil.send(p.name, "You are not allowed to speak right now.");
 			return true;

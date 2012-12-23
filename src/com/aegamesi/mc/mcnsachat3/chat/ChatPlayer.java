@@ -102,7 +102,8 @@ public class ChatPlayer {
 		PluginUtil.sendLater(name, "Welcome to channel " + chan.color + chan.name + "&f!");
 		ArrayList<String> names = new ArrayList<String>();
 		for (ChatPlayer p : PlayerManager.getPlayersInChannel(chan.name))
-			names.add(p.name);
+			if (!chan.modes.contains(ChatChannel.Mode.LOCAL) || p.server.equals(this.server))
+				names.add(p.name);
 		PluginUtil.sendLater(name, "Players here: " + PluginUtil.formatPlayerList(names.toArray(new String[0])));
 	}
 

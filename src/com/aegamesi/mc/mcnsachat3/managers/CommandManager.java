@@ -114,7 +114,7 @@ public class CommandManager {
 
 		if (!message.trim().equals("")) {
 			// send a message rather than changing
-			String write_perm = ChannelManager.getChannel(channel).read_permission;
+			String write_perm = ChannelManager.getChannel(channel).write_permission;
 			if (!write_perm.equals("") && !MCNSAChat3.permissions.has(player, "mcnsachat3.write." + write_perm)) {
 				plugin.getLogger().info(player.getName() + " attempted to write to channel " + channel + " without permission!");
 				PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
