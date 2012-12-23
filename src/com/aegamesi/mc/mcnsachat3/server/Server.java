@@ -46,6 +46,8 @@ public class Server {
 
 		System.out.println("Listening on port " + port);
 		new ListenThread().start();
+		OnlinePlayersThread onlinePlayersThread = new OnlinePlayersThread();
+		onlinePlayersThread.start();
 
 		// start the i/o loop now
 		Scanner in = new Scanner(System.in);
@@ -60,6 +62,7 @@ public class Server {
 		System.out.println("Server is shutting down NOW!");
 		System.out.println("WARNING: Threads may take longer to close");
 		serverSock.close();
+		onlinePlayersThread.interrupt();
 		for (ServerThread thread : threads) {
 			thread.socket.close();
 		}
