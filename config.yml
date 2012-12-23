@@ -8,3 +8,5 @@ strings:
   player-quit: '%prefix%%player% &ehas left &7%server%&e!'
   message: '{&7%server%&f} <%channel%&f> [%rank%&f] %player%: &7%message%'
   action: '{&7%server%&f} <%channel%&f> * %prefix%%player% &f%message%'
+  pm_send: '&7(to %to%) %message%' # you can also use %from%
+  pm_receive: '&7(from %from%) %message%' # you can also use %to%

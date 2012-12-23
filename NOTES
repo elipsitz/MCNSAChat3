@@ -9,5 +9,6 @@ mcnsachat3.command.move
 mcnsachat3.command.mode
 mcnsachat3.command.color
 mcnsachat3.command.search
+mcnsachat3.command.msg
 mcnsachat3.read.*
 mcnsachat3.write.*

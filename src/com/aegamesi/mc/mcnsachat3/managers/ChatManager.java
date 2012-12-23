@@ -16,6 +16,41 @@ public class ChatManager {
 		this.plugin = plugin;
 	}
 
+	public void pm_receive(ChatPlayer from, String to, String line) {
+		if (MCNSAChat3.permissions.getUser(from.name).has("mcnsachat3.user.cancolor"))
+			line = PluginUtil.color(line);
+		else
+			line = PluginUtil.stripColor(line);
+		
+		ChatPlayer cpto = PlayerManager.getPlayer(to, plugin.name);
+		if(cpto == null)
+			return;
+		cpto.lastPM = from.name;
+
+		String message = plugin.getConfig().getString("strings.pm_receive");
+		message = message.replace("%message%", line);
+		message = message.replace("%from%", from.name);
+		message = message.replace("%to%", to);
+
+		PluginUtil.sendLater(to, message);
+	}
+
+	public void pm_send(ChatPlayer from, String to, String line) {
+		if (MCNSAChat3.permissions.getUser(from.name).has("mcnsachat3.user.cancolor"))
+			line = PluginUtil.color(line);
+		else
+			line = PluginUtil.stripColor(line);
+		
+		from.lastPM = to;
+
+		String message = plugin.getConfig().getString("strings.pm_send");
+		message = message.replace("%message%", line);
+		message = message.replace("%from%", from.name);
+		message = message.replace("%to%", to);
+
+		PluginUtil.sendLater(from.name, message);
+	}
+
 	public void chat(ChatPlayer player, String line, String channel) {
 		ChatChannel chan = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel);
 		if (channel == null || channel.length() <= 0)
@@ -30,7 +65,7 @@ public class ChatManager {
 
 		String message = plugin.getConfig().getString("strings.message");
 		message = message.replace("%server%", player.server);
-		message = message.replace("%channel%", chan.color + channel);
+		message = message.replace("%channel%", chan.color + chan.name);
 		message = message.replace("%rank%", PluginUtil.formatRank(player.name));
 		message = message.replace("%prefix%", MCNSAChat3.permissions.getUser(player.name).getPrefix());
 		message = message.replace("%player%", player.name);
@@ -53,7 +88,7 @@ public class ChatManager {
 
 		String message = plugin.getConfig().getString("strings.action");
 		message = message.replace("%server%", player.server);
-		message = message.replace("%channel%", chan.color + channel);
+		message = message.replace("%channel%", chan.color + chan.name);
 		message = message.replace("%rank%", PluginUtil.formatRank(player.name));
 		message = message.replace("%prefix%", MCNSAChat3.permissions.getUser(player.name).getPrefix());
 		message = message.replace("%player%", player.name);
@@ -68,7 +103,6 @@ public class ChatManager {
 			return;
 		ArrayList<ChatPlayer> players = PlayerManager.getPlayersListeningToChannel(chan.name);
 		for (ChatPlayer p : players) {
-			System.out.println(p.name);
 			boolean send = player == null;
 			if (!send) {
 				if (net)
@@ -77,7 +111,7 @@ public class ChatManager {
 					send = Bukkit.getPlayerExact(p.name) != null && p.server.equals(player.server);
 			}
 			if (send)
-				PluginUtil.sendLater(p.name, line);
+				PluginUtil.sendLater(p.name, line + "&r");
 		}
 		Bukkit.getConsoleSender().sendMessage(PluginUtil.color(line));
 	}

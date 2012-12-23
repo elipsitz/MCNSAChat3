@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+
 import com.aegamesi.mc.mcnsachat3.chat.ChatChannel;
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
 import com.aegamesi.mc.mcnsachat3.managers.ChannelManager;
@@ -18,10 +20,10 @@ import com.aegamesi.mc.mcnsachat3.packets.IPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerChatPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerLeftPacket;
+import com.aegamesi.mc.mcnsachat3.packets.PlayerPMPacket;
 import com.aegamesi.mc.mcnsachat3.packets.PlayerUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerJoinedPacket;
 import com.aegamesi.mc.mcnsachat3.packets.ServerLeftPacket;
-import com.aegamesi.mc.mcnsachat3.packets.VersionPacket;
 
 public class ClientThread extends Thread {
 	public Socket socket = null;
@@ -58,7 +60,6 @@ public class ClientThread extends Thread {
 		log.info("Connected to chat server.");
 
 		try {
-			new VersionPacket(VersionPacket.CURRENT_VERSION).write(out);
 			new ServerJoinedPacket(plugin.name, PlayerManager.getPlayersByServer(plugin.name)).write(out);
 			new ChannelListingPacket(ChannelManager.channels).write(out);
 
@@ -221,6 +222,16 @@ public class ClientThread extends Thread {
 				plugin.chat.action(packet.player, packet.message, packet.channel);
 			if (packet.type == PlayerChatPacket.Type.MISC)
 				plugin.chat.info(null, packet.message, packet.channel, true);
+			return true;
+		}
+		if (type == PlayerPMPacket.id) {
+			PlayerPMPacket packet = new PlayerPMPacket();
+			packet.read(in);
+			if (packet.from.server.equals(plugin.name))
+				return true;
+			
+			if(Bukkit.getPlayerExact(packet.to) != null)
+				plugin.chat.pm_receive(packet.from, packet.to, packet.message);
 			return true;
 		}
 		return false;

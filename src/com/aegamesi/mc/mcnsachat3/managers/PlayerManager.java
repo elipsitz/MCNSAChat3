@@ -44,6 +44,16 @@ public class PlayerManager {
 		return plays;
 	}
 	
+	public static ArrayList<ChatPlayer> getPlayersByFuzzyName(String name) {
+		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
+		for (ChatPlayer play : players) {
+			System.out.println("aaa");
+			if (play.name.toLowerCase().startsWith(name.toLowerCase()))
+				plays.add(play);
+		}
+		return plays;
+	}
+	
 	public static ArrayList<ChatPlayer> getPlayersListeningToChannel(String channel) {
 		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
 		for (ChatPlayer play : players)

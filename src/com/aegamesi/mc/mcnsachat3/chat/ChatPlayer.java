@@ -16,6 +16,7 @@ public class ChatPlayer {
 	public String server;
 	public String channel;
 	public String formatted;
+	public String lastPM;
 	public ArrayList<String> listening;
 	public ArrayList<Mode> modes;
 
@@ -32,6 +33,7 @@ public class ChatPlayer {
 		this.listening = (ArrayList<String>) listening.clone();
 		this.formatted = name;
 		this.modes = new ArrayList<Mode>();
+		this.lastPM = "";
 	}
 
 	public void write(DataOutputStream out) throws IOException {
@@ -39,6 +41,7 @@ public class ChatPlayer {
 		out.writeUTF(formatted);
 		out.writeUTF(server);
 		out.writeUTF(channel);
+		out.writeUTF(lastPM);
 		out.writeInt(listening.size());
 		for (String listen : listening)
 			out.writeUTF(listen);
@@ -52,6 +55,7 @@ public class ChatPlayer {
 		String formatted = in.readUTF();
 		String server = in.readUTF();
 		String channel = in.readUTF();
+		String lastPM = in.readUTF();
 		ArrayList<String> listening = new ArrayList<String>();
 		int size = in.readInt();
 		for (int i = 0; i < size; i++)
@@ -64,6 +68,7 @@ public class ChatPlayer {
 		ChatPlayer p = new ChatPlayer(name, server, channel, listening);
 		p.formatted = formatted;
 		p.modes = modes;
+		p.lastPM = lastPM;
 		return p;
 	}
 
