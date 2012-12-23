@@ -55,6 +55,9 @@ public class ChatManager {
 		ChatChannel chan = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel);
 		if (channel == null || channel.length() <= 0)
 			channel = chan.name;
+		else
+			chan = ChannelManager.getChannel(channel);
+		
 		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
 			line = PluginUtil.color(line);
 		else
@@ -71,13 +74,16 @@ public class ChatManager {
 		message = message.replace("%player%", player.name);
 		message = message.replace("%message%", line);
 
-		info(player, message, channel, !(player.server.equals(plugin.name)));
+		info(player, message, chan.name, !(player.server.equals(plugin.name)));
 	}
 
 	public void action(ChatPlayer player, String line, String channel) {
 		ChatChannel chan = ChannelManager.getChannel(PlayerManager.getPlayer(player).channel);
 		if (channel == null || channel.length() <= 0)
 			channel = chan.name;
+		else
+			chan = ChannelManager.getChannel(channel);
+		
 		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
 			line = PluginUtil.color(line);
 		else
@@ -94,7 +100,7 @@ public class ChatManager {
 		message = message.replace("%player%", player.name);
 		message = message.replace("%message%", line);
 
-		info(player, message, channel, !(player.server.equals(plugin.name)));
+		info(player, message, chan.name, !(player.server.equals(plugin.name)));
 	}
 
 	public void info(ChatPlayer player, String line, String channel, boolean net) {

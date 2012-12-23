@@ -120,7 +120,7 @@ public class CommandManager {
 				PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 				return;
 			}
-			if(cp.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(cp.channel).modes.contains(ChatChannel.Mode.MUTE)) {
+			if(cp.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.MUTE)) {
 				PluginUtil.send(cp.name, "You are not allowed to speak right now.");
 				return;
 			}
