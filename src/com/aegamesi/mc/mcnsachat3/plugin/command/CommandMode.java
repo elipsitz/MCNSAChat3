@@ -52,7 +52,7 @@ public class CommandMode implements Command {
 			}
 		}
 
-		PluginUtil.send("Modes changed.");
+		PluginUtil.send(player.getName(), "Modes changed.");
 		if (MCNSAChat3.thread != null)
 			MCNSAChat3.thread.write(new ChannelUpdatePacket(chan));
 

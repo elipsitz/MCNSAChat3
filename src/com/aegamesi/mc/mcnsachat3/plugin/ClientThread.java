@@ -213,7 +213,7 @@ public class ClientThread extends Thread {
 			packet.read(in);
 			if (packet.player.server.equals(plugin.name))
 				return true;
-			if(ChannelManager.getChannel(packet.channel == null ? packet.player.channel : packet.channel).modes.contains(ChatChannel.Mode.LOCAL))
+			if (ChannelManager.getChannel(packet.channel == null ? packet.player.channel : packet.channel).modes.contains(ChatChannel.Mode.LOCAL))
 				return true;
 
 			if (packet.type == PlayerChatPacket.Type.CHAT)
@@ -229,8 +229,9 @@ public class ClientThread extends Thread {
 			packet.read(in);
 			if (packet.from.server.equals(plugin.name))
 				return true;
-			
-			if(Bukkit.getPlayerExact(packet.to) != null)
+
+			plugin.getLogger().info("[" + packet.from.name + " -> " + packet.to + "] " + packet.message);
+			if (Bukkit.getPlayerExact(packet.to) != null)
 				plugin.chat.pm_receive(packet.from, packet.to, packet.message);
 			return true;
 		}

@@ -29,7 +29,7 @@ public class CommandColor implements Command {
 
 		chan.color = "&" + args[1];
 
-		PluginUtil.send("Channel color changed.");
+		PluginUtil.send(player.getName(), "Channel color changed.");
 		if (MCNSAChat3.thread != null)
 			MCNSAChat3.thread.write(new ChannelUpdatePacket(chan));
 

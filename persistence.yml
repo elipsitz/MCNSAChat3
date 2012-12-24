@@ -19,27 +19,22 @@ channels:
   color: '&5'
   modes:
   - LOCAL
-  - LOCKED
-  - HIDDEN
 - write_permission: broadcast
   read_permission: ''
   name: NET_ANNOUNCE
   alias: nbc
   color: '&5'
-  modes:
-  - LOCKED
-  - HIDDEN
+  modes: []
 - write_permission: admin
   read_permission: admin
   name: ADMIN
   alias: a
   color: '&a'
-  modes:
-  - HIDDEN
+  modes: []
 - write_permission: mod
   read_permission: mod
   name: MOD
   alias: m
   color: '&5'
   modes:
-  - HIDDEN
+  - LOCAL
