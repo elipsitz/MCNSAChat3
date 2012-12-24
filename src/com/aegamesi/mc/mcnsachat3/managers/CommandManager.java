@@ -28,6 +28,8 @@ import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSearch;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSeeAll;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSilence;
+import com.aegamesi.mc.mcnsachat3.plugin.command.fun.CommandDicks;
+import com.aegamesi.mc.mcnsachat3.plugin.command.fun.CommandPong;
 
 public class CommandManager {
 	public MCNSAChat3 plugin = null;
@@ -51,6 +53,10 @@ public class CommandManager {
 		registerCommand(new CommandSearch(plugin));
 		registerCommand(new CommandMsg(plugin));
 		registerCommand(new CommandR(plugin));
+
+		// "fun" commands
+		registerCommand(new CommandDicks(plugin));
+		registerCommand(new CommandPong(plugin));
 	}
 
 	public void registerCommand(Command command) {
@@ -81,7 +87,7 @@ public class CommandManager {
 		}
 		if (!commands.containsKey(tokens[0]))
 			return false;
-		if (!commands.get(tokens[0]).permissions.equals("") && !MCNSAChat3.permissions.has(player,  "mcnsachat3.command." + commands.get(tokens[0]).permissions)) {
+		if (!commands.get(tokens[0]).permissions.equals("") && !MCNSAChat3.permissions.has(player, "mcnsachat3.command." + commands.get(tokens[0]).permissions)) {
 			plugin.getLogger().info(player.getName() + " attempted to use command: " + tokens[0] + " without permission!");
 			PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 			return true;
@@ -99,7 +105,7 @@ public class CommandManager {
 
 	private void handleAlias(Player player, String alias, String message) {
 		ChatPlayer cp = PlayerManager.getPlayer(player.getName(), plugin.name);
-		if(cp.modes.contains(ChatPlayer.Mode.LOCKED)) {
+		if (cp.modes.contains(ChatPlayer.Mode.LOCKED)) {
 			PluginUtil.send(cp.name, "You have been locked in your channel and may not change channels.");
 			return;
 		}
@@ -120,7 +126,7 @@ public class CommandManager {
 				PluginUtil.send(player.getName(), "&cYou don't have permission to do that!");
 				return;
 			}
-			if(cp.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.MUTE)) {
+			if (cp.modes.contains(ChatPlayer.Mode.MUTE) || ChannelManager.getChannel(channel).modes.contains(ChatChannel.Mode.MUTE)) {
 				PluginUtil.send(cp.name, "You are not allowed to speak right now.");
 				return;
 			}

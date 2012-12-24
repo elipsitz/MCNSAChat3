@@ -2,7 +2,10 @@ package com.aegamesi.mc.mcnsachat3.managers;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
+
 import com.aegamesi.mc.mcnsachat3.chat.ChatPlayer;
+import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 
 public class PlayerManager {
 	public static ArrayList<ChatPlayer> players;
@@ -55,9 +58,11 @@ public class PlayerManager {
 	
 	public static ArrayList<ChatPlayer> getPlayersListeningToChannel(String channel) {
 		ArrayList<ChatPlayer> plays = new ArrayList<ChatPlayer>();
-		for (ChatPlayer play : players)
-			if (play.listening.contains(channel.toLowerCase()) || play.modes.contains(ChatPlayer.Mode.SEEALL))
+		for (ChatPlayer play : players) {
+			boolean forced = Bukkit.getPlayer(play.name) != null && MCNSAChat3.permissions.has(Bukkit.getPlayer(play.name), "mcnsachat3.forcelisten." + channel.toLowerCase());
+			if (play.listening.contains(channel.toLowerCase()) || play.modes.contains(ChatPlayer.Mode.SEEALL) || forced)
 				plays.add(play);
+		}
 		return plays;
 	}
 	

@@ -151,7 +151,7 @@ public class ClientThread extends Thread {
 				String joinString = plugin.getConfig().getString("strings.player-join");
 				joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
 				joinString = joinString.replaceAll("%player%", packet.player.name);
-				joinString = joinString.replaceAll("%server%", plugin.name);
+				joinString = joinString.replaceAll("%server%", packet.player.server);
 				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
 				for (ChatPlayer p : toNotify)
 					if (p.server.equals(plugin.name))
@@ -173,7 +173,7 @@ public class ClientThread extends Thread {
 				String quitString = plugin.getConfig().getString("strings.player-quit");
 				quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
 				quitString = quitString.replaceAll("%player%", packet.player.name);
-				quitString = quitString.replaceAll("%server%", plugin.name);
+				quitString = quitString.replaceAll("%server%", packet.player.server);
 				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
 				for (ChatPlayer p : toNotify)
 					if (p.server.equals(plugin.name))

@@ -22,7 +22,6 @@ public class ChatPlayer {
 
 	public ChatPlayer(String name, String server) {
 		this(name, server, "", new ArrayList<String>());
-		// XXX change this to defaults
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,7 +100,7 @@ public class ChatPlayer {
 		// welcome them
 		PluginUtil.sendLater(name, "Welcome to channel " + chan.color + chan.name + "&f!");
 		ArrayList<String> names = new ArrayList<String>();
-		for (ChatPlayer p : PlayerManager.getPlayersInChannel(chan.name))
+		for (ChatPlayer p : PlayerManager.getPlayersListeningToChannel(chan.name))
 			if (!chan.modes.contains(ChatChannel.Mode.LOCAL) || p.server.equals(this.server))
 				names.add(p.name);
 		PluginUtil.sendLater(name, "Players here: " + PluginUtil.formatPlayerList(names.toArray(new String[0])));

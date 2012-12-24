@@ -26,7 +26,7 @@ public class CommandHelp implements Command {
 		InternalCommand[] commands = plugin.command.listCommands();
 		ArrayList<InternalCommand> permCommands = new ArrayList<InternalCommand>();
 		for (int i = 0; i < commands.length; i++)
-			if (commands[i].permissions.equals("") || MCNSAChat3.permissions.has(player, commands[i].permissions))
+			if (commands[i].permissions.equals("") || MCNSAChat3.permissions.has(player, "mcnsachat3.command." + commands[i].permissions))
 				permCommands.add(commands[i]);
 
 		int totalPages = permCommands.size() / 4;
