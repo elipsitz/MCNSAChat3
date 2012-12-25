@@ -556,3 +556,36 @@
 #11[default] 2012-12-23 15:10:36 |Players lost: Altimeter 
 #10[t] 2012-12-23 15:10:40 |Connection lost.
 #10[t] 2012-12-23 15:10:40 |Players lost: 
+#10[127.0.0.1:63782] 2012-12-25 03:24:42 |Server joined: default
+#10[default] 2012-12-25 03:24:42 |Players added: PickleMan 
+#10[default] 2012-12-25 03:24:42 |Received channel listing. Size: 29
+#10[default] 2012-12-25 03:28:50 |Connection lost.
+#10[default] 2012-12-25 03:28:50 |Players lost: PickleMan 
+#11[127.0.0.1:63890] 2012-12-25 03:28:51 |Server joined: default
+#11[default] 2012-12-25 03:28:51 |Players added: PickleMan 
+#11[default] 2012-12-25 03:28:51 |Received channel listing. Size: 29
+#10[127.0.0.1:63974] 2012-12-25 03:33:20 |Server joined: default
+#10[default] 2012-12-25 03:33:20 |Players added: PickleMan 
+#10[default] 2012-12-25 03:33:20 |Received channel listing. Size: 29
+#10[default] 2012-12-25 03:33:39 |Connection lost.
+#10[default] 2012-12-25 03:33:39 |Players lost: PickleMan 
+#11[127.0.0.1:63980] 2012-12-25 03:33:39 |Server joined: default
+#11[default] 2012-12-25 03:33:39 |Players added: PickleMan 
+#11[default] 2012-12-25 03:33:39 |Received channel listing. Size: 29
+#11[default] 2012-12-25 03:36:52 |Error writing packet class com.aegamesi.mc.mcnsachat3.packets.InfoPacket
+#11[default] 2012-12-25 03:36:52 |Connection lost.
+#11[default] 2012-12-25 03:36:52 |Players lost: PickleMan 
+#12[127.0.0.1:64109] 2012-12-25 03:36:59 |Server joined: default
+#12[default] 2012-12-25 03:36:59 |Players added: PickleMan 
+#12[default] 2012-12-25 03:36:59 |Received channel listing. Size: 29
+#10[127.0.0.1:64171] 2012-12-25 03:40:11 |Server joined: default
+#10[default] 2012-12-25 03:40:11 |Players added: PickleMan 
+#10[default] 2012-12-25 03:40:11 |Received channel listing. Size: 29
+#10[default] 2012-12-25 03:41:34 |Connection lost.
+#10[default] 2012-12-25 03:41:34 |Players lost: PickleMan 
+#11[127.0.0.1:64204] 2012-12-25 03:42:16 |PickleMan joined default
+#11[127.0.0.1:64204] 2012-12-25 03:43:07 |Error writing packet class com.aegamesi.mc.mcnsachat3.packets.InfoPacket
+#11[127.0.0.1:64204] 2012-12-25 03:43:07 |Connection lost.
+#11[127.0.0.1:64204] 2012-12-25 03:43:07 |Players lost: 
+#12[127.0.0.1:64228] 2012-12-25 03:48:36 |Connection lost.
+#12[127.0.0.1:64228] 2012-12-25 03:48:36 |Players lost: 
