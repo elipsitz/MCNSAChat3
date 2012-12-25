@@ -59,12 +59,12 @@ public class PlayerListener implements Listener {
 
 		PlayerManager.players.add(p);
 		if (MCNSAChat3.thread != null)
-			MCNSAChat3.thread.write(new PlayerJoinedPacket(p));
+			MCNSAChat3.thread.write(new PlayerJoinedPacket(p, plugin.longname));
 		// tell *everybody!*
 		String joinString = plugin.getConfig().getString("strings.player-join");
 		joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(evt.getPlayer()).getPrefix());
 		joinString = joinString.replaceAll("%player%", evt.getPlayer().getName());
-		joinString = joinString.replaceAll("%server%", plugin.name);
+		joinString = joinString.replaceAll("%server%", plugin.longname);
 		PluginUtil.send(joinString);
 		if (welcomeThem) {
 			String welcomeString = plugin.getConfig().getString("strings.player-welcome");
@@ -95,12 +95,12 @@ public class PlayerListener implements Listener {
 		MCNSAChat3.persist.get().set(pre + "listening", p.listening);
 		// network
 		if (MCNSAChat3.thread != null)
-			MCNSAChat3.thread.write(new PlayerLeftPacket(p));
+			MCNSAChat3.thread.write(new PlayerLeftPacket(p, plugin.longname));
 		// tell *everybody!*
 		String quitString = plugin.getConfig().getString("strings.player-quit");
 		quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(evt.getPlayer()).getPrefix());
 		quitString = quitString.replaceAll("%player%", evt.getPlayer().getName());
-		quitString = quitString.replaceAll("%server%", plugin.name);
+		quitString = quitString.replaceAll("%server%", plugin.longname);
 		PluginUtil.send(quitString);
 	}
 

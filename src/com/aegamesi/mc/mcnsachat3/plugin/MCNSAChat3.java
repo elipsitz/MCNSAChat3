@@ -26,6 +26,7 @@ import com.aegamesi.mc.mcnsachat3.managers.PlayerManager;
 public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	public static ClientThread thread = null;
 	public String name;
+	public String longname;
 
 	public ChatManager chat;
 	public CommandManager command;
@@ -40,6 +41,7 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 
 		// whew all the handlers and managers...mostly
 		name = getConfig().getString("name");
+		longname = getConfig().getString("longname");
 		pHandler = new PlayerListener(this);
 		chat = new ChatManager(this);
 		command = new CommandManager(this);

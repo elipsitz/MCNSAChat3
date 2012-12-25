@@ -11,7 +11,6 @@ public class ListenThread extends Thread {
 				ServerThread t = new ServerThread(sock);
 				t.start();
 				Server.threads.add(t);
-				t.log("New connection");
 			}
 		} catch (IOException e) {
 			System.out.println("Server Socket closed.");

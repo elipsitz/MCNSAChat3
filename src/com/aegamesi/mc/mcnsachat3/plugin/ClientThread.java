@@ -60,7 +60,7 @@ public class ClientThread extends Thread {
 		log.info("Connected to chat server.");
 
 		try {
-			new ServerJoinedPacket(plugin.name, PlayerManager.getPlayersByServer(plugin.name)).write(out);
+			new ServerJoinedPacket(plugin.name, plugin.longname, PlayerManager.getPlayersByServer(plugin.name)).write(out);
 			new ChannelListingPacket(ChannelManager.channels).write(out);
 
 			while (loop(in, out))
@@ -110,7 +110,6 @@ public class ClientThread extends Thread {
 			log.info("Players joined: " + msg);
 
 			PlayerManager.players.addAll(packet.players);
-			// TODO server join/left message (broadcast)
 			return true;
 		}
 		if (type == ServerLeftPacket.id) {
@@ -151,7 +150,7 @@ public class ClientThread extends Thread {
 				String joinString = plugin.getConfig().getString("strings.player-join");
 				joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
 				joinString = joinString.replaceAll("%player%", packet.player.name);
-				joinString = joinString.replace("%server%", packet.player.server);
+				joinString = joinString.replace("%server%", packet.longname);
 				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
 				for (ChatPlayer p : toNotify)
 					if (p.server.equals(plugin.name))
@@ -173,7 +172,7 @@ public class ClientThread extends Thread {
 				String quitString = plugin.getConfig().getString("strings.player-quit");
 				quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
 				quitString = quitString.replaceAll("%player%", packet.player.name);
-				quitString = quitString.replace("%server%", packet.player.server);
+				quitString = quitString.replace("%server%", packet.longname);
 				ArrayList<ChatPlayer> toNotify = PlayerManager.getPlayersListeningToChannel(packet.player.channel);
 				for (ChatPlayer p : toNotify)
 					if (p.server.equals(plugin.name))

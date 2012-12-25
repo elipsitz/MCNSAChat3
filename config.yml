@@ -1,4 +1,5 @@
-name: default
+name: d
+longname: Default
 default-channel: g
 default-listen: [g, local_announce, net_announce]
 chat-server: '127.0.0.1'

@@ -29,6 +29,7 @@ public class ServerThread extends Thread {
 	public DataOutputStream out = null;
 	public DataInputStream in = null;
 	public String name = "";
+	public String longname = "";
 	public String host;
 
 	public ServerThread(Socket socket) {
@@ -61,7 +62,7 @@ public class ServerThread extends Thread {
 			// send the servers
 			for (ServerThread thread : Server.threads)
 				if (thread != this)
-					write(new ServerJoinedPacket(thread.name, PlayerManager.getPlayersByServer(thread.name)));
+					write(new ServerJoinedPacket(thread.name, thread.longname, PlayerManager.getPlayersByServer(thread.name)));
 			return true;
 		}
 		if (type == ChannelListingPacket.id) {

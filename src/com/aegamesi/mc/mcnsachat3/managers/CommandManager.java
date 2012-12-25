@@ -57,7 +57,7 @@ public class CommandManager {
 		registerCommand(new CommandR(plugin));
 		registerCommand(new CommandReload(plugin));
 		registerCommand(new CommandName(plugin));
-
+		
 		// "fun" commands
 		registerCommand(new CommandDicks(plugin));
 		registerCommand(new CommandPong(plugin));

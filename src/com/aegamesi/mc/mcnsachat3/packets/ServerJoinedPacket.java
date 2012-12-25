@@ -11,19 +11,22 @@ public class ServerJoinedPacket implements IPacket {
 	public static final short id = 1;
 
 	public String shortName = null;
+	public String longName = null;
 	public ArrayList<ChatPlayer> players = null;
 
 	public ServerJoinedPacket() {
 	}
 	
-	public ServerJoinedPacket(String shortName, ArrayList<ChatPlayer> players) {
+	public ServerJoinedPacket(String shortName, String longName, ArrayList<ChatPlayer> players) {
 		this.shortName = shortName;
+		this.longName = longName;
 		this.players = players;
 	}
 
 	public void write(DataOutputStream out) throws IOException {
 		out.writeShort(id);
 		out.writeUTF(shortName);
+		out.writeUTF(longName);
 		if (players == null) {
 			out.writeInt(0);
 		} else {
@@ -37,6 +40,7 @@ public class ServerJoinedPacket implements IPacket {
 
 	public void read(DataInputStream in) throws IOException {
 		shortName = in.readUTF();
+		longName = in.readUTF();
 		players = new ArrayList<ChatPlayer>();
 		int numPlayers = in.readInt();
 		for (int i = 0; i < numPlayers; i++) {
