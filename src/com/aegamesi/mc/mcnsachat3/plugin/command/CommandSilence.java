@@ -36,7 +36,7 @@ public class CommandSilence implements Command {
 			p.modes.add(ChatPlayer.Mode.MUTE);
 		}
 		
-		PluginUtil.send(player.getName(), "Silenced " + PluginUtil.formatUser(p.name));
+		PluginUtil.send(player.getName(), "Toggled silenced " + PluginUtil.formatUser(p.name));
 		
 		if (MCNSAChat3.thread != null)
 			MCNSAChat3.thread.write(new PlayerUpdatePacket(p));

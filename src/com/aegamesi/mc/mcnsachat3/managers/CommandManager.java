@@ -23,8 +23,10 @@ import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMe;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMode;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMove;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMsg;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandName;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandR;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandReload;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSearch;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSeeAll;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSilence;
@@ -53,6 +55,8 @@ public class CommandManager {
 		registerCommand(new CommandSearch(plugin));
 		registerCommand(new CommandMsg(plugin));
 		registerCommand(new CommandR(plugin));
+		registerCommand(new CommandReload(plugin));
+		registerCommand(new CommandName(plugin));
 
 		// "fun" commands
 		registerCommand(new CommandDicks(plugin));
