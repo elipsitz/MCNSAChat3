@@ -15,6 +15,7 @@ import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 import com.aegamesi.mc.mcnsachat3.plugin.command.Command;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandAlias;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandChannel;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandClist;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandColor;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandHelp;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandList;
@@ -59,6 +60,7 @@ public class CommandManager {
 		registerCommand(new CommandReload(plugin));
 		registerCommand(new CommandName(plugin));
 		registerCommand(new CommandAlias(plugin));
+		registerCommand(new CommandClist(plugin));
 		
 		// "fun" commands
 		registerCommand(new CommandDicks(plugin));

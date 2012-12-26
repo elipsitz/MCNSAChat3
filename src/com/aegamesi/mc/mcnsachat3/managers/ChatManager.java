@@ -63,12 +63,12 @@ public class ChatManager {
 		else
 			line = PluginUtil.stripColor(line);
 
-		if (chan.modes.contains(ChatChannel.Mode.RAVE))
-			line = PluginUtil.raveColor(line);
 		if (chan.modes.contains(ChatChannel.Mode.RANDOM))
 			line = "&k" + line;
 		if (chan.modes.contains(ChatChannel.Mode.LOUD))
-			line = PluginUtil.stripColor(line).toUpperCase();
+			line = PluginUtil.color("&l" + line).toUpperCase();
+		if (chan.modes.contains(ChatChannel.Mode.RAVE))
+			line = PluginUtil.raveColor(line);
 
 		String message = plugin.getConfig().getString("strings.message");
 		message = message.replace("%server%", player.server);
@@ -93,12 +93,12 @@ public class ChatManager {
 		else
 			line = PluginUtil.stripColor(line);
 
-		if (chan.modes.contains(ChatChannel.Mode.RAVE))
-			line = PluginUtil.raveColor(line);
 		if (chan.modes.contains(ChatChannel.Mode.RANDOM))
 			line = "&k" + line;
 		if (chan.modes.contains(ChatChannel.Mode.LOUD))
-			line = PluginUtil.stripColor(line).toUpperCase();
+			line = PluginUtil.color("&l" + line).toUpperCase();
+		if (chan.modes.contains(ChatChannel.Mode.RAVE))
+			line = PluginUtil.raveColor(line);
 
 		String message = plugin.getConfig().getString("strings.action");
 		message = message.replace("%server%", player.server);
