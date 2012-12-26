@@ -2,6 +2,7 @@ package com.aegamesi.mc.mcnsachat3.server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -168,10 +169,13 @@ public class ServerThread extends Thread {
 			in = new DataInputStream(socket.getInputStream());
 			while (loop(in, out))
 				;
-		} catch (IOException e) {
-			log("Connection lost.");
-
+		} catch (EOFException e) {
+			log("EOFException...lost connection.");
 			Server.threads.remove(this);
+			return;
+		} catch (IOException e) {
+			log("IOException...did we lose the connection?");
+			e.printStackTrace();
 			return;
 		} finally {
 			try {

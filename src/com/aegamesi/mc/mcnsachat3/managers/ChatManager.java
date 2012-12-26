@@ -21,9 +21,9 @@ public class ChatManager {
 			line = PluginUtil.color(line);
 		else
 			line = PluginUtil.stripColor(line);
-		
+
 		ChatPlayer cpto = PlayerManager.getPlayer(to, plugin.name);
-		if(cpto == null)
+		if (cpto == null)
 			return;
 		cpto.lastPM = from.name;
 
@@ -40,7 +40,7 @@ public class ChatManager {
 			line = PluginUtil.color(line);
 		else
 			line = PluginUtil.stripColor(line);
-		
+
 		from.lastPM = to;
 
 		String message = plugin.getConfig().getString("strings.pm_send");
@@ -57,14 +57,18 @@ public class ChatManager {
 			channel = chan.name;
 		else
 			chan = ChannelManager.getChannel(channel);
-		
-		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
+
+		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor") && !chan.modes.contains(ChatChannel.Mode.BORING))
 			line = PluginUtil.color(line);
 		else
 			line = PluginUtil.stripColor(line);
 
 		if (chan.modes.contains(ChatChannel.Mode.RAVE))
 			line = PluginUtil.raveColor(line);
+		if (chan.modes.contains(ChatChannel.Mode.RANDOM))
+			line = "&k" + line;
+		if (chan.modes.contains(ChatChannel.Mode.LOUD))
+			line = PluginUtil.stripColor(line).toUpperCase();
 
 		String message = plugin.getConfig().getString("strings.message");
 		message = message.replace("%server%", player.server);
@@ -83,14 +87,18 @@ public class ChatManager {
 			channel = chan.name;
 		else
 			chan = ChannelManager.getChannel(channel);
-		
-		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor"))
+
+		if (MCNSAChat3.permissions.getUser(player.name).has("mcnsachat3.user.cancolor") && !chan.modes.contains(ChatChannel.Mode.BORING))
 			line = PluginUtil.color(line);
 		else
 			line = PluginUtil.stripColor(line);
 
 		if (chan.modes.contains(ChatChannel.Mode.RAVE))
 			line = PluginUtil.raveColor(line);
+		if (chan.modes.contains(ChatChannel.Mode.RANDOM))
+			line = "&k" + line;
+		if (chan.modes.contains(ChatChannel.Mode.LOUD))
+			line = PluginUtil.stripColor(line).toUpperCase();
 
 		String message = plugin.getConfig().getString("strings.action");
 		message = message.replace("%server%", player.server);

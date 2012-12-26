@@ -23,7 +23,7 @@ public class ChatChannel {
 	}
 
 	public enum Mode {
-		LOCAL, MUTE, RAVE;
+		LOCAL, MUTE, RAVE, RANDOM, LOUD, BORING;
 	}
 	
 	public void write(DataOutputStream out) throws IOException {

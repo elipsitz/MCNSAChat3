@@ -21,8 +21,8 @@ public class PlayerLeftPacket implements IPacket {
 	}
 
 	public void write(DataOutputStream out) throws IOException {
-		out.writeUTF(longname);
 		out.writeShort(id);
+		out.writeUTF(longname);
 		player.write(out);
 		out.flush();
 	}

@@ -8,7 +8,7 @@ import com.aegamesi.mc.mcnsachat3.packets.ChannelUpdatePacket;
 import com.aegamesi.mc.mcnsachat3.plugin.MCNSAChat3;
 import com.aegamesi.mc.mcnsachat3.plugin.PluginUtil;
 
-@Command.CommandInfo(alias = "cmode", permission = "mode", usage = "<channel> <mode changes>", description = "changes the modes of a channel. LOCAL, MUTE, RAVE")
+@Command.CommandInfo(alias = "cmode", permission = "mode", usage = "<channel> <mode changes>", description = "changes the modes of a channel. LOCAL, MUTE, RAVE, RANDOM, LOUD, BORING")
 public class CommandMode implements Command {
 	public static MCNSAChat3 plugin = null;
 
