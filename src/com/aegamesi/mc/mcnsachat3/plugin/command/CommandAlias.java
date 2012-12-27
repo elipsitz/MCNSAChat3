@@ -26,16 +26,18 @@ public class CommandAlias implements Command {
 			PluginUtil.send(player.getName(), "&cChannel not found.");
 			return true;
 		}
-		
-		if(args[1].equals("null"))
+
+		if (!chan.alias.equals(""))
+			plugin.command.aliases.remove(chan.alias);
+		if (args[1].equals("null"))
 			chan.alias = "";
 		else
 			chan.alias = args[1];
+		plugin.command.aliases.put(chan.alias, chan.name);
 
-		PluginUtil.send(player.getName(), "Channel alias changed.");
+		PluginUtil.send(player.getName(), "Channel alias changed! Now: '" + chan.alias + "'");
 		if (MCNSAChat3.thread != null)
 			MCNSAChat3.thread.write(new ChannelUpdatePacket(chan));
-
 		return true;
 	}
 }

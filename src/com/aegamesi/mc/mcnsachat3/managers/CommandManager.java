@@ -55,7 +55,6 @@ public class CommandManager {
 		registerCommand(new CommandMode(plugin));
 		registerCommand(new CommandColor(plugin));
 		registerCommand(new CommandSearch(plugin));
-		registerCommand(new CommandMsg(plugin));
 		registerCommand(new CommandR(plugin));
 		registerCommand(new CommandReload(plugin));
 		registerCommand(new CommandName(plugin));
@@ -65,15 +64,28 @@ public class CommandManager {
 		// "fun" commands
 		registerCommand(new CommandDicks(plugin));
 		registerCommand(new CommandPong(plugin));
+		
+		// "msg" aliases
+		registerCommand(new CommandMsg(plugin));
+		registerCommand(new CommandMsg(plugin), "tell");
+		registerCommand(new CommandMsg(plugin), "w");
+		registerCommand(new CommandMsg(plugin), "whisper");
 	}
 
 	public void registerCommand(Command command) {
+		registerCommand(command, null);
+	}
+	
+	public void registerCommand(Command command, String alias) {
 		Class<? extends Command> cls = command.getClass();
 		Annotation[] annotations = cls.getAnnotations();
 		for (int i = 0; i < annotations.length; i++) {
 			if (annotations[i] instanceof Command.CommandInfo) {
 				Command.CommandInfo ci = (Command.CommandInfo) annotations[i];
-				commands.put(ci.alias(), new InternalCommand(ci.alias(), ci.permission(), ci.usage(), ci.description(), ci.visible(), command));
+				boolean visible = alias == null ? false : ci.visible();
+				if(alias == null)
+					alias = ci.alias();
+				commands.put(alias, new InternalCommand(alias, ci.permission(), ci.usage(), ci.description(), visible, command));
 				return;
 			}
 		}

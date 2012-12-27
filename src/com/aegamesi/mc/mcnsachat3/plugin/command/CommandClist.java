@@ -20,7 +20,9 @@ public class CommandClist implements Command {
 		String chans = "";
 		for(ChatChannel chan : ChannelManager.channels) {
 			String perm = chan.read_permission;
-			if((perm == "" || MCNSAChat3.permissions.has(player, perm)) && (PlayerManager.getPlayersInChannel(chan.name).size() > 0 || chan.modes.contains(ChatChannel.Mode.PERSIST))) 
+			boolean hasPerm = perm.equals("") || MCNSAChat3.permissions.has(player, "mcnsachat3.read." + perm);
+			boolean chanOccupied = PlayerManager.getPlayersInChannel(chan.name).size() > 0 || chan.modes.contains(ChatChannel.Mode.PERSIST);
+			if(hasPerm && chanOccupied) 
 				chans += chan.color + chan.name + " ";
 		}
 		PluginUtil.send(player.getName(), "Channels: " + chans);
