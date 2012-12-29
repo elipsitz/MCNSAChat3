@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.FileHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,6 +34,7 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 	public PlayerListener pHandler;
 	public static Persistence persist;
 	public static PermissionManager permissions;
+	private FileHandler fileHandler;
 
 	public void onEnable() {
 		persist = new Persistence(this);
@@ -49,6 +51,16 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 		ChannelManager.init();
 		PluginUtil.plugin = this;
 		permissions = PermissionsEx.getPermissionManager();
+		
+		getLogger().setUseParentHandlers(false);
+		try {
+			fileHandler = new FileHandler(getDataFolder() + "/chat3.log", 1024 * 1024 * 1024, 1);
+			fileHandler.setFormatter(new LogFormatter());
+			getLogger().addHandler(fileHandler);
+		} catch (SecurityException | IOException e) {
+			System.out.println("Error opening log file, redirecting output to console.");
+			getLogger().setUseParentHandlers(true);
+		}
 
 		// persistence
 		loadPlayers();
@@ -152,5 +164,6 @@ public final class MCNSAChat3 extends JavaPlugin implements Listener {
 			}
 			thread = null;
 		}
+		fileHandler.close();
 	}
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -58,6 +59,7 @@ public class ClientThread extends Thread {
 
 		connected = true;
 		log.info("Connected to chat server.");
+		System.out.println("Connected to chat server.");
 
 		try {
 			new ServerJoinedPacket(plugin.name, plugin.longname, PlayerManager.getPlayersByServer(plugin.name)).write(out);
@@ -103,7 +105,7 @@ public class ClientThread extends Thread {
 				return true;
 
 			// log + notify
-			log.info("Server joined " + packet.shortName);
+			log.info("Server joined " + packet.longName);
 			String msg = "";
 			for (ChatPlayer p : packet.players)
 				msg += p.name + " ";
@@ -145,7 +147,7 @@ public class ClientThread extends Thread {
 				return true;
 
 			// log + notify
-			log.info("Player joined " + packet.player.name + " from " + packet.player.server);
+			log.info("Player joined " + packet.player.name + " from " + packet.longname);
 			if (!ChannelManager.getChannel(packet.player.channel).modes.contains(ChatChannel.Mode.LOCAL)) {
 				String joinString = plugin.getConfig().getString("strings.player-join");
 				joinString = joinString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
@@ -167,7 +169,7 @@ public class ClientThread extends Thread {
 				return true;
 
 			// log + notify
-			log.info("Player left" + packet.player.name + " from " + packet.player.server);
+			log.info("Player left " + packet.player.name + " from " + packet.longname);
 			if (!ChannelManager.getChannel(packet.player.channel).modes.contains(ChatChannel.Mode.LOCAL)) {
 				String quitString = plugin.getConfig().getString("strings.player-quit");
 				quitString = quitString.replaceAll("%prefix%", MCNSAChat3.permissions.getUser(packet.player.name).getPrefix());
@@ -243,8 +245,14 @@ public class ClientThread extends Thread {
 		try {
 			packet.write(out);
 		} catch (IOException e) {
-			log.warning("Error writing packet " + packet.getClass());
-			e.printStackTrace();
+			log.warning("Error writing packet " + packet.getClass() + ". Stack Trace Below:");
+			plugin.getLogger().log(Level.SEVERE, e.getMessage(), e);
+			
+			MCNSAChat3.thread = null;
+			try {
+				socket.close();
+			} catch (IOException e1) {
+			}
 		}
 	}
 }

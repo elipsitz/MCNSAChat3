@@ -28,6 +28,7 @@ import com.aegamesi.mc.mcnsachat3.plugin.command.CommandMsg;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandName;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandR;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandRanks;
+import com.aegamesi.mc.mcnsachat3.plugin.command.CommandReconnect;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandReload;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSearch;
 import com.aegamesi.mc.mcnsachat3.plugin.command.CommandSeeAll;
@@ -60,16 +61,18 @@ public class CommandManager {
 		registerCommand(new CommandName(plugin));
 		registerCommand(new CommandAlias(plugin));
 		registerCommand(new CommandClist(plugin));
+		registerCommand(new CommandMsg(plugin));
+		registerCommand(new CommandReconnect(plugin));
 		
 		// "fun" commands
 		registerCommand(new CommandDicks(plugin));
 		registerCommand(new CommandPong(plugin));
 		
-		// "msg" aliases
-		registerCommand(new CommandMsg(plugin));
+		// aliases
 		registerCommand(new CommandMsg(plugin), "tell");
 		registerCommand(new CommandMsg(plugin), "w");
 		registerCommand(new CommandMsg(plugin), "whisper");
+		registerCommand(new CommandList(plugin), "who");
 	}
 
 	public void registerCommand(Command command) {
@@ -82,7 +85,7 @@ public class CommandManager {
 		for (int i = 0; i < annotations.length; i++) {
 			if (annotations[i] instanceof Command.CommandInfo) {
 				Command.CommandInfo ci = (Command.CommandInfo) annotations[i];
-				boolean visible = alias == null ? false : ci.visible();
+				boolean visible = alias == null ? ci.visible() : false;
 				if(alias == null)
 					alias = ci.alias();
 				commands.put(alias, new InternalCommand(alias, ci.permission(), ci.usage(), ci.description(), visible, command));
